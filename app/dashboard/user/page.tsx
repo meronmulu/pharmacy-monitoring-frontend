@@ -1,7 +1,12 @@
-import React from 'react'
+'use client'
 
-export default function page() {
+import UserTable from "../../../components/UserTable"
+
+export default function Page() {
   return (
-    <div className='text-amber-700'>page</div>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Users</h1>
+      <UserTable />
+    </div>
   )
 }
