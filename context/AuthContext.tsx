@@ -19,19 +19,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   
 
   // login method now takes credentials and calls your login service
-const login = async (credentials: { email: string; password: string }): Promise<boolean> => {
+const login = async (credentials: { email: string; password: string }) => {
   try {
     const res = await UserService.login(credentials);
+
     if (res?.token && res?.user) {
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify(res.user));
       setUser(res.user);
 
-      return true;
+      return res.user; // 🔥 return user
     }
-    return false;
+
+    return null;
   } catch {
-    return false;
+    return null;
   }
 };
 

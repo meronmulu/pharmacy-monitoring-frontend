@@ -39,12 +39,23 @@ export const login = async (credentials: { email: string; password: string }) =>
   try {
     const res = await instance.post("/users/login", credentials);
 
-    if (res.data?.token && res.data?.user) {
+    if (res.data?.token) {
+      // decode token to extract role
+      const decoded: any = JSON.parse(
+        atob(res.data.token.split('.')[1])
+      );
+
+      const user = {
+        id: decoded.userId,
+        role: decoded.role,
+      };
+
       return {
         token: res.data.token,
-        user: res.data.user,
+        user,
       };
     }
+
     return null;
   } catch (error: any) {
     console.error("Login failed:", error.response?.data || error.message);
@@ -54,35 +65,36 @@ export const login = async (credentials: { email: string; password: string }) =>
 
 
 
-// export const getUserById = async (userId: number): Promise<User | null> => {
-//   try {
-//     const res = await instance.get(`/users/${userId}`); 
-//     console.log("Fetched user:", res.data.data);
-//     return res.data.data;
-//   } catch (error) {
-//     console.error( error);
-//     return null;
-//   }
-// };
 
-// export const updateUser = async (id: number, user: Partial<User> ) =>{
-//   try {
-//      const res = await instance.put<{data: User}>(`/users/update/${id}`, user);
-//        console.log(res.data.data)
-//        return res.data.data
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+export const getUserById = async (id: number): Promise<User | null> => {
+  try {
+    const res = await instance.get(`/users/${id}`); 
+    console.log("Fetched user:", res.data.data);
+    return res.data.data;
+  } catch (error) {
+    console.error( error);
+    return null;
+  }
+};
 
 
-//   export const deleteUser = async(userId: number): Promise<boolean> =>{
-//     try {
-//       const res = await instance.delete(`/users/delete/${userId}`)
-//       console.log(res);
-//       return true
-//     } catch (error) {
-//       console.log(error)
-//       return false 
-//     }
-//   }
+ export const updateUser = async (id: number, userData: Partial<User> ) =>{
+  try {
+     const res = await instance.put<{data: User}>(`/users/${id}`, userData);
+         console.log(res.data.data)
+            return res.data.data
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export const deleteUser = async(id: number): Promise<boolean> =>{
+    try {
+        const res = await instance.delete(`/users/${id}`)
+        console.log(res);
+        return true
+    } catch (error) {
+        console.log(error)
+        return false 
+    }
+}

@@ -23,16 +23,24 @@ export default function Login() {
   const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
 
-    const success = await login({ email, password });
-    if (success) {
-      router.push('/dashboard'); // redirect after login
-    } else {
-      setError('Invalid email or password');
-    }
-  };
+  const user = await login({ email, password });
+
+  if (user) {
+    const roleRoutes: Record<string, string> = {
+      ADMIN: "/dashboard",
+      CASHIER: "/casher",
+      PHARMACY: "/pharmacy",
+    };
+
+    router.push(roleRoutes[user.role] || "/");
+  } else {
+    setError("Invalid email or password");
+  }
+};
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-100 px-4">

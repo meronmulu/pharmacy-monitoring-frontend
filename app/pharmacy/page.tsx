@@ -99,7 +99,7 @@ export default function Page() {
                             className="w-64"
                         />
                         <Link href="/dashboard/medicine/create">
-                            <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition">
+                            <button className="px-4 py-2 bg-emerald-500 text-white rounded-md transition">
                                 + Medicine
                             </button>
                         </Link>

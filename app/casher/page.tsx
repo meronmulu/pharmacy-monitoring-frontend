@@ -1,5 +1,6 @@
 'use client'
 
+import NavBar from '@/components/NavBar'
 import { useState, useMemo } from 'react'
 
 type Medicine = {
@@ -65,6 +66,11 @@ export default function PharmacyPage() {
   }, [cart])
 
   return (
+
+    <>
+    <div>
+        <NavBar/>
+    </div>
     <div className="flex h-screen p-6 gap-6 bg-gray-100">
       
       {/* LEFT SIDE */}
@@ -175,5 +181,7 @@ export default function PharmacyPage() {
         </div>
       </div>
     </div>
+    </>
+    
   )
 }
