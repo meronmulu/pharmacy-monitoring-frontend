@@ -29,7 +29,6 @@ export default function EditUserPage() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [role, setRole] = useState("")
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
 
   // Fetch user by ID
@@ -43,7 +42,6 @@ export default function EditUserPage() {
         setRole(user.role)
       }
 
-      setLoading(false)
     }
 
     if (id) fetchUser()
@@ -66,9 +64,7 @@ export default function EditUserPage() {
     setSaving(false)
   }
 
-  if (loading) {
-    return <div className="p-6">Loading user...</div>
-  }
+ 
 
   return (
     <div className="flex min-h-screen px-6 items-center justify-center bg-gray-50">

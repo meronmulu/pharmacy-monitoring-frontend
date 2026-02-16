@@ -1,43 +1,74 @@
 'use client';
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAllSuppliers } from "@/service/supplierService";
+import { createMedicine } from "@/service/medicineService";
+import { useRouter } from "next/navigation";
+
+interface Supplier {
+  id: number;
+  name: string;
+}
 
 export default function AddMedicinePage() {
+  const router = useRouter();
+  const [suppliers, setSuppliers] = useState<Supplier[]>([]);
+
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
     price: "",
-    stock: "",
+    quantity: "",
     expiryDate: "",
-    description: ""
+    supplierId: ""
   });
 
-  const handleChange = (e) => {
+  useEffect(() => {
+    const fetchSuppliers = async () => {
+      const data = await getAllSuppliers();
+      setSuppliers(data);
+    };
+    fetchSuppliers();
+  }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Medicine Data:", formData);
-    alert("Medicine Added Successfully (UI Only)");
+
+    const formattedData = {
+      ...formData,
+      price: Number(formData.price),
+      quantity: Number(formData.quantity),
+      supplierId: Number(formData.supplierId),
+      expiryDate: new Date(formData.expiryDate).toISOString()
+
+    };
+ console.log("Sending data to backend:", formattedData);
+
+    await createMedicine(formattedData);
+
+    alert("Medicine Added Successfully 💊");
+    router.push("/dashboard/medicine");
   };
 
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      
       <h1 className="text-2xl font-bold mb-6 text-gray-800">
         Add New Medicine
       </h1>
 
-      <form 
+      <form
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg p-6 space-y-4"
       >
-        
-        {/* Medicine Name */}
+        {/* Name */}
         <div>
           <label className="block mb-1 font-medium">Medicine Name</label>
           <input
@@ -45,26 +76,8 @@ export default function AddMedicinePage() {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            placeholder="Enter medicine name"
-            className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border rounded-md p-2"
           />
-        </div>
-
-        {/* Category */}
-        <div>
-          <label className="block mb-1 font-medium">Category</label>
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          >
-            <option value="">Select Category</option>
-            <option value="Tablet">Tablet</option>
-            <option value="Syrup">Syrup</option>
-            <option value="Injection">Injection</option>
-            <option value="Capsule">Capsule</option>
-          </select>
         </div>
 
         {/* Price */}
@@ -75,25 +88,23 @@ export default function AddMedicinePage() {
             name="price"
             value={formData.price}
             onChange={handleChange}
-            placeholder="Enter price"
-            className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border rounded-md p-2"
           />
         </div>
 
-        {/* Stock */}
+        {/* Quantity */}
         <div>
-          <label className="block mb-1 font-medium">Stock Quantity</label>
+          <label className="block mb-1 font-medium">Quantity</label>
           <input
             type="number"
-            name="stock"
-            value={formData.stock}
+            name="quantity"
+            value={formData.quantity}
             onChange={handleChange}
-            placeholder="Enter stock quantity"
-            className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border rounded-md p-2"
           />
         </div>
 
-        {/* Expiry Date */}
+        {/* Expiry */}
         <div>
           <label className="block mb-1 font-medium">Expiry Date</label>
           <input
@@ -101,31 +112,34 @@ export default function AddMedicinePage() {
             name="expiryDate"
             value={formData.expiryDate}
             onChange={handleChange}
-            className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            className="w-full border rounded-md p-2"
           />
         </div>
 
-        {/* Description */}
+        {/* Supplier Dropdown */}
         <div>
-          <label className="block mb-1 font-medium">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
+          <label className="block mb-1 font-medium">Supplier</label>
+          <select
+            name="supplierId"
+            value={formData.supplierId}
             onChange={handleChange}
-            placeholder="Optional description"
-            rows="3"
-            className="w-full border rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          />
+            className="w-full border rounded-md p-2"
+          >
+            <option value="">Select Supplier</option>
+            {suppliers.map((supplier) => (
+              <option key={supplier.id} value={supplier.id}>
+                {supplier.name}
+              </option>
+            ))}
+          </select>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
         >
           Add Medicine
         </button>
-
       </form>
     </div>
   );
