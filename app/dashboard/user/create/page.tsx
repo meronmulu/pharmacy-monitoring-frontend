@@ -42,8 +42,7 @@ export default function RegisterPage() {
     })
 
     if (user) {
-      // ✅ Redirect to users page
-      router.push("dashboard/user")  // change path if needed
+      router.push("/dashboard/user")  
     }
 
     setLoading(false)

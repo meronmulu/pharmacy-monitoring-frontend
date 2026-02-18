@@ -1,6 +1,11 @@
+'use client'
 
-export default function page() {
+import SaleTable from "../../../components/SaleTable"
+
+export default function Page() {
   return (
-    <div>page</div>
+    <div className="px-4 pt-16 pb-4">
+      <SaleTable/>
+    </div>
   )
 }

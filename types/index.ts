@@ -24,3 +24,29 @@ export interface Medicine {
   };
 }
 
+export interface SaleItem {
+  id: number
+  saleId: number
+  medicineId: number
+  quantity: number
+  price: number
+  medicine: {
+    id: number
+    name: string
+  }
+}
+
+export interface Sale {
+  id: number
+  cashierId: number
+  cashier: {
+    id: number
+    name: string
+  }
+  total: number
+  status: "PENDING" | "COMPLETED" | "CANCELLED"
+  items: SaleItem[]
+  createdAt: string
+}
+
+
