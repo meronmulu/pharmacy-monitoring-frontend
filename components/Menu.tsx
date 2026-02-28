@@ -40,6 +40,11 @@ const Menu = () => {
       href: '/dashboard/sale',
       icon: ShoppingCart,
     },
+     {
+      label: 'Suppliers',
+      href: '/dashboard/sale',
+      icon: ShoppingCart,
+    },
   ];
 
   return (

@@ -141,9 +141,7 @@ export default function SalesPage() {
                 return sum + itemsTotal;
             }, 0)
             : 0,
-        averageTransaction: Array.isArray(filteredSales) && filteredSales.length > 0 
-            ? filteredSales.reduce((sum, sale) => sum + (sale?.total || 0), 0) / filteredSales.length 
-            : 0
+       
     }
 
     const toggleRow = (saleId: string) => {
@@ -186,46 +184,7 @@ export default function SalesPage() {
 
     return (
         <div className="flex h-screen bg-gray-50">
-            {/* Sidebar */}
-            <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
-                <div className="p-4 border-b border-gray-200">
-                    <h2 className="text-lg font-semibold text-gray-800">PharmacyMonitor</h2>
-                    <p className="text-xs text-gray-500 mt-1">Sales Dashboard</p>
-                </div>
-                
-                <div className="flex-1 p-4">
-                    <div className="space-y-1">
-                        <Button variant="ghost" className="w-full justify-start gap-2 text-sm font-normal">
-                            <LayoutDashboard size={16} />
-                            Dashboard
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start gap-2 text-sm font-normal bg-emerald-50 text-emerald-700">
-                            <ShoppingCart size={16} />
-                            Sales
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start gap-2 text-sm font-normal">
-                            <Users size={16} />
-                            User Management
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start gap-2 text-sm font-normal">
-                            <Pill size={16} />
-                            Medicine Management
-                        </Button>
-                        <Button variant="ghost" className="w-full justify-start gap-2 text-sm font-normal">
-                            <Settings size={16} />
-                            Settings
-                        </Button>
-                    </div>
-                </div>
-                
-                <div className="p-4 border-t border-gray-200">
-                    <Button variant="ghost" className="w-full justify-start gap-2 text-sm font-normal text-red-600">
-                        <LogOut size={16} />
-                        Logout
-                    </Button>
-                </div>
-            </div>
-
+           
             {/* Main Content */}
             <div className="flex-1 flex flex-col overflow-hidden">
                 {/* Header */}
@@ -271,22 +230,17 @@ export default function SalesPage() {
                             {summary.totalItems}
                         </p>
                     </div>
-                    <div className="bg-white rounded-lg p-3 border border-gray-200">
-                        <p className="text-xs text-gray-500">Average</p>
-                        <p className="text-lg font-semibold text-gray-800 mt-1">
-                            ETB {formatCurrency(summary.averageTransaction)}
-                        </p>
-                    </div>
+                    
                 </div>
 
                 {/* Filters */}
                 <div className="px-4 pb-2">
                     <div className="bg-white rounded-lg border border-gray-200 p-2">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-5">
                                 <Filter size={14} className="text-gray-400" />
                                 <span className="text-xs font-medium text-gray-600">Filter by:</span>
-                                <div className="flex gap-1">
+                                <div className="flex gap-4">
                                     <button onClick={fetchSales} className={getFilterButtonClass('all')}>
                                         <Calendar size={12} />
                                         All Time
@@ -327,7 +281,6 @@ export default function SalesPage() {
                                         <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2 text-right">Total</TableHead>
                                         <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Status</TableHead>
                                         <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Date</TableHead>
-                                        <TableHead className="w-6 px-2 py-2"></TableHead>
                                     </TableRow>
                                 </TableHeader>
 
@@ -391,11 +344,7 @@ export default function SalesPage() {
                                                     <TableCell className="px-3 py-2 text-sm text-gray-600">
                                                         <ClientDate dateString={sale?.createdAt || ''} />
                                                     </TableCell>
-                                                    <TableCell className="px-2 py-2">
-                                                        <Button variant="ghost" size="icon" className="h-6 w-6">
-                                                            <Eye size={12} className="text-gray-400" />
-                                                        </Button>
-                                                    </TableCell>
+                                                    
                                                 </TableRow>
 
                                                 {/* Expanded Items */}

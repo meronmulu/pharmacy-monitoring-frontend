@@ -11,7 +11,7 @@ export default function Page() {
         <h1 className="text-2xl font-bold mb-4">Users</h1> 
         <Button className="bg-emerald-500 text-white">
           
-          <Link href="/dashboard/user/create">+ Users</Link>
+          <Link href="/signup">+ Users</Link>
         </Button>
       </div>
      
