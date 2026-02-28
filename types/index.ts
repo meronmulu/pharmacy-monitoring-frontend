@@ -50,3 +50,12 @@ export interface Sale {
 }
 
 
+export interface Supplier {
+  id: number
+  name: string
+  phone?: string
+  email?: string
+  address?: string
+  medicines?: Medicine[] 
+  createdAt: string 
+}

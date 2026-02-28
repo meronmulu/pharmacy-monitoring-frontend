@@ -10,6 +10,7 @@ export async function getAllmedicines(): Promise<Medicine[]> {
 
   } catch (error) {
     console.log("Error fetching medicines:", error);
+    return [];
   }
 }
 export const createMedicine = async (medicineData: Partial<Medicine>): Promise<Medicine | null> => {
@@ -23,12 +24,8 @@ export const createMedicine = async (medicineData: Partial<Medicine>): Promise<M
 
     console.error("Unexpected response structure:", res.data);
     return null;
-  } catch (error: any) {
-    console.error("Registration error:", {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-    });
+  } catch (error) {
+    console.error("Error creating medicine:", error);
     return null;
   }
 };

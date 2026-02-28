@@ -67,13 +67,13 @@ export default function EditUserPage() {
  
 
   return (
-    <div className="flex min-h-screen px-6 items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen px-6 pt-8 items-center justify-center bg-gray-50">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
         <form onSubmit={handleSubmit}>
           <FieldGroup>
             <FieldSet>
-              <FieldLegend>Edit User</FieldLegend>
-              <FieldDescription>
+              <FieldLegend className="text-6xl text-center font-bold">Update User</FieldLegend>
+              <FieldDescription className="text-center">
                 Update user account information
               </FieldDescription>
 
@@ -117,7 +117,7 @@ export default function EditUserPage() {
               <Button
                 type="submit"
                 disabled={saving}
-                className="w-full bg-emerald-500 hover:bg-emerald-600"
+                className="w-full text-white bg-emerald-500 hover:bg-emerald-600"
               >
                 {saving ? "Updating..." : "Update User"}
               </Button>

@@ -1,32 +1,23 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { getAllSuppliers } from "@/service/supplierService";
-import { createMedicine } from "@/service/medicineService";
+import { createSupplier, getAllSuppliers } from "@/service/supplierService";
 import { useRouter } from "next/navigation";
-import {
-              Select,
-              SelectContent,
-              SelectItem,
-              SelectTrigger,
-              SelectValue,
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 interface Supplier {
   id: number;
   name: string;
 }
 
-export default function AddMedicinePage() {
+export default function AddSupplierPage() {
   const router = useRouter();
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
 
   const [formData, setFormData] = useState({
     name: "",
-    price: "",
-    quantity: "",
-    expiryDate: "",
-    supplierId: ""
+    phone: "",
+    email: "",
+    address: "",
   });
 
   useEffect(() => {
@@ -51,16 +42,16 @@ export default function AddMedicinePage() {
 
     const formattedData = {
       ...formData,
-      price: Number(formData.price),
-      quantity: Number(formData.quantity),
-      supplierId: Number(formData.supplierId),
-      expiryDate: new Date(formData.expiryDate).toISOString()
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email,
+      address: formData.address
     };
 
-    await createMedicine(formattedData);
+    await createSupplier(formattedData);
 
-    alert("Medicine Added Successfully ");
-    router.push("/dashboard/medicine");
+    alert("Supplier Added Successfully ");
+    router.push("/dashboard/supplier");
   };
 
   return (
@@ -70,10 +61,10 @@ export default function AddMedicinePage() {
         {/* Header */}
         <div className="px-8 py-6 border-b border-gray-100">
           <h1 className="text-2xl font-semibold text-gray-800">
-            Add New Medicine
+            Add New Supplier
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Enter medicine details below to add it to inventory
+            Enter supplier details below to add it to inventory
           </p>
         </div>
 
@@ -83,105 +74,75 @@ export default function AddMedicinePage() {
           className="px-8 py-8 space-y-6"
         >
 
-          {/* Medicine Name */}
+          {/* Supplier Name */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-gray-700">
-              Medicine Name
+              Supplier Name
             </label>
-            <input
+            <Input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               required
               className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-              placeholder="Enter medicine name"
+              placeholder="Enter supplier name"
             />
           </div>
 
-          {/* Price + Quantity Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Price (ETB)
+                Phone Number
               </label>
-              <input
+              <Input
                 type="number"
-                name="price"
-                value={formData.price}
+                name="phone"
+                value={formData.phone}
                 onChange={handleChange}
                 required
                 className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="0.00"
+                placeholder="Enter phone number"
               />
             </div>
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Quantity
+                Email
               </label>
-              <input
-                type="number"
-                name="quantity"
-                value={formData.quantity}
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleChange}
                 required
                 className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="Enter quantity"
+                placeholder="Enter email"
               />
             </div>
 
-          </div>
 
-          {/* Expiry + Supplier Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+       
 
             <div className="space-y-2">
               <label className="text-sm font-medium text-gray-700">
-                Expiry Date
+                Adress
               </label>
-              <input
-                type="date"
-                name="expiryDate"
-                value={formData.expiryDate}
+              <Input
+                type="text"
+                name="address"
+                value={formData.address}
                 onChange={handleChange}
                 required
                 className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
+                placeholder="Enter address"
               />
             </div>
 
             
 
-            <div className="space-y-2">
-              <Label className="text-sm font-medium text-gray-700">
-                Supplier
-              </Label>
+          
 
-              <Select
-                value={formData.supplierId}
-                onValueChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    supplierId: value,
-                  }))
-                }
-              >
-                <SelectTrigger className="w-full h-11 rounded-lg border border-gray-200 focus:ring-2 focus:ring-emerald-500">
-                  <SelectValue placeholder="Select Supplier" />
-                </SelectTrigger>
-
-                <SelectContent>
-                  {suppliers.map((supplier) => (
-                    <SelectItem key={supplier.id} value={supplier.id.toString()}>
-                      {supplier.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-          </div>
 
           {/* Submit Button */}
           <div className="pt-4">
@@ -189,7 +150,7 @@ export default function AddMedicinePage() {
               type="submit"
               className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition shadow-md"
             >
-              Add Medicine
+              Add Supplier
             </button>
           </div>
 

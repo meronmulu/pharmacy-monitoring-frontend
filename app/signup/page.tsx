@@ -62,7 +62,7 @@ export default function RegisterPage() {
                 <form onSubmit={handleSubmit}>
 
                   
-                    <div className="px-10 py-10 space-y-8">
+                    <div className="px-10 space-y-8">
 
                         {/* Name */}
                         <div className="space-y-2">
@@ -127,7 +127,6 @@ export default function RegisterPage() {
                             </div>
                         </div>
 
-                        {/* Role */}
                         {/* Role */}
                         <div className="space-y-2">
                             <label className="text-sm font-medium text-gray-700 flex items-center gap-2">

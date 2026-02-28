@@ -10,7 +10,6 @@ import {
     CardDescription,
     CardHeader,
     CardTitle,
-    CardFooter
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -40,7 +39,8 @@ import {
     ChevronDown,
     Pill,
     Clock,
-    TrendingUp
+    TrendingUp,
+    LucideIcon
 } from "lucide-react"
 import Link from "next/link"
 import { getAllmedicines } from "@/service/medicineService"
@@ -104,6 +104,7 @@ export default function Page() {
         inStock: medicines.filter(m => m.quantity > 10 && new Date(m.expiryDate) >= new Date()).length
     }
 
+
     const StatCard = ({ 
         title, 
         value, 
@@ -113,7 +114,7 @@ export default function Page() {
     }: { 
         title: string; 
         value: number; 
-        icon: any; 
+        icon: LucideIcon; 
         color: string;
         onClick?: () => void;
     }) => (
@@ -161,17 +162,7 @@ export default function Page() {
                             </p>
                         </div>
 
-                        <motion.div
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                        >
-                            <Link href="/dashboard/medicine/create">
-                                <Button className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-500/25">
-                                    <Plus className="h-4 w-4 mr-2" />
-                                    Add Medicine
-                                </Button>
-                            </Link>
-                        </motion.div>
+                        
                     </div>
                 </motion.div>
 

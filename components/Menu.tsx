@@ -9,7 +9,8 @@ import {
   ShoppingCart,
   Settings,
   LogOut,
-  User
+  User,
+  Store
 } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { useAuth } from '@/context/AuthContext';
@@ -42,8 +43,8 @@ const Menu = () => {
     },
      {
       label: 'Suppliers',
-      href: '/dashboard/sale',
-      icon: ShoppingCart,
+      href: '/dashboard/supplier',
+      icon: Store ,
     },
   ];
 

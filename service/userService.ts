@@ -24,12 +24,8 @@ export const register = async (userData: Partial<User>): Promise<User | null> =>
 
     console.error("Unexpected response structure:", res.data);
     return null;
-  } catch (error: any) {
-    console.error("Registration error:", {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status,
-    });
+  } catch (error) {
+    console.log("Error registering user:", error);
     return null;
   }
 };
@@ -41,7 +37,7 @@ export const login = async (credentials: { email: string; password: string }) =>
 
     if (res.data?.token) {
       // decode token to extract role
-      const decoded: any = JSON.parse(
+      const decoded = JSON.parse(
         atob(res.data.token.split('.')[1])
       );
 
@@ -57,9 +53,8 @@ export const login = async (credentials: { email: string; password: string }) =>
     }
 
     return null;
-  } catch (error: any) {
-    console.error("Login failed:", error.response?.data || error.message);
-    return null;
+  } catch (error) {
+    console.log("Login error:", error);
   }
 };
 
