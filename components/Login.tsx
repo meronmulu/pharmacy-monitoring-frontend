@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react";
+import { toast } from "sonner";
 
 export default function Login() {
   const { login } = useAuth();
@@ -27,38 +28,55 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  type User = {
+    name?: string;
+    role: string;
+    [key: string]: any;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
-    const user = await login({ email, password });
+    try {
+      const user = await login({ email, password })
 
-    if (user) {
-      const roleRoutes: Record<string, string> = {
-        ADMIN: "/dashboard",
-        CASHIER: "/casher",
-        PHARMACIST: "/pharmacy",
-      };
-      router.push(roleRoutes[user.role] || "/");
-    } else {
-      setError("Invalid email or password");
+      if (user && typeof user === "object" && "role" in user) {
+        toast.success("Login Successful", {
+          style: {
+            background: " #fff",
+            color: "#16a34a",
+            border: "1px solid #16a34a",
+            borderRadius: "8px",
+          },
+        })
+        const roleRoutes: Record<string, string> = {
+          ADMIN: "/dashboard",
+          CASHIER: "/casher",
+          PHARMACIST: "/pharmacy",
+        }
+
+        router.push(roleRoutes[(user as { role: string }).role] || "/")
+      } else {
+        toast.error("Invalid email or password")
+        setError("Invalid email or password")
+      }
+    } catch (err) {
+      console.log(err)
+      toast.error(err.message || "Login failed")
+      setError("Login failed")
+    } finally {
+      setLoading(false)
     }
-
-    setLoading(false);
-  };
+  }
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-hidden">
-      {/* Animated background elements */}
-      {/* <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div> */}
+
 
       <Card className="relative flex flex-col bg-white/80 backdrop-blur-sm lg:flex-row w-full max-w-4xl shadow-2xl rounded-3xl overflow-hidden border-0">
-        
+
         {/* Left Image with overlay gradient */}
         <div className="hidden lg:block lg:w-1/2 relative ">
           <Image
@@ -70,7 +88,7 @@ export default function Login() {
             priority
           />
           {/* Overlay text */}
-          
+
         </div>
 
         {/* Right Form */}
@@ -91,7 +109,7 @@ export default function Login() {
 
           <CardContent className="p-0">
             <form onSubmit={handleSubmit} className="space-y-5">
-              
+
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
                   Email Address
@@ -167,15 +185,15 @@ export default function Login() {
                 )}
               </Button>
 
-              
+
             </form>
           </CardContent>
 
-         
+
         </div>
       </Card>
 
-      
+
     </div>
   );
 }

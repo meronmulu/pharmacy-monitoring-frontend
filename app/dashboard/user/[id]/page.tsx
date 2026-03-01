@@ -67,7 +67,7 @@ export default function EditUserPage() {
  
 
   return (
-    <div className="flex min-h-screen px-6 pt-8 items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen p-4 items-center justify-center bg-gray-50">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
         <form onSubmit={handleSubmit}>
           <FieldGroup>

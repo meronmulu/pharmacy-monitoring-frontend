@@ -4,7 +4,7 @@ import SaleTable from "../../../components/SaleTable"
 
 export default function Page() {
   return (
-    <div className="px-4 pt-16 pb-4">
+    <div className="p-4">
       <SaleTable/>
     </div>
   )

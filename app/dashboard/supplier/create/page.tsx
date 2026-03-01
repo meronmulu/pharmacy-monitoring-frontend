@@ -55,7 +55,7 @@ export default function AddSupplierPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] flex justify-center items-start py-16 px-6">
+    <div className="min-h-screen bg-[#F7F8FA] flex justify-center items-start p-4">
       <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-gray-100">
 
         {/* Header */}

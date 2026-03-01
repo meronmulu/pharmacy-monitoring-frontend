@@ -25,3 +25,23 @@ export const createSale = async (saleData: Partial<Sale>): Promise<Sale | null> 
 
 
 }
+ export const getSalesByCashierId = async (cashierId: number) => {
+  try {
+    const response = await instance.get(`/sales/cashier/${cashierId}`)
+
+    return response.data.data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export const deleteSale = async(id: number): Promise<boolean> =>{
+    try {
+        const res = await instance.delete(`/sales/${id}`)
+        console.log(res);
+        return true
+    } catch (error) {
+        console.log(error)
+        return false 
+    }
+}

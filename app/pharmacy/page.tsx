@@ -143,7 +143,7 @@ export default function Page() {
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             <NavBar />
 
-            <div className="px-4 sm:px-6 lg:px-8 py-24 max-w-7xl mx-auto">
+            <div className="px-4 sm:px-6 lg:px-8 p-4 max-w-7xl mx-auto">
                 {/* Header Section */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}

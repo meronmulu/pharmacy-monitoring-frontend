@@ -15,9 +15,12 @@ import {
   Calendar,
   ChevronDown,
   Filter,
+  Trash2,
 } from "lucide-react"
-import { getAllSales } from "@/service/saleService"
+import { deleteSale, getAllSales } from "@/service/saleService"
 import { Input } from "./ui/input"
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog"
+import { Button } from "./ui/button"
 
 // Client-safe date formatter
 const ClientDate = ({ dateString }: { dateString: string }) => {
@@ -38,6 +41,7 @@ export default function SalesPage() {
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'daily' | 'weekly' | 'monthly'>('all')
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set())
   const [searchTerm, setSearchTerm] = useState("")
+  const [deletingId, setDeletingId] = useState<number | null>(null)
 
   // Fetch all sales from backend
   const fetchSales = async () => {
@@ -101,13 +105,7 @@ export default function SalesPage() {
     ),
   }
 
-  // Expand/collapse row
-  const toggleRow = (saleId: number) => {
-    const newExpanded = new Set(expandedRows)
-    if (newExpanded.has(saleId)) newExpanded.delete(saleId)
-    else newExpanded.add(saleId)
-    setExpandedRows(newExpanded)
-  }
+ 
 
   const getFilterButtonClass = (filter: typeof selectedFilter) => {
     const base = "px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-1 whitespace-nowrap"
@@ -127,6 +125,23 @@ export default function SalesPage() {
       default: return 'bg-gray-100 text-gray-700 border-gray-200'
     }
   }
+
+   const handleDelete = async (id: number) => {
+  try {
+    setDeletingId(id)
+
+    await deleteSale(id)
+
+    setAllSales((prev) => prev.filter((sale) => sale.id !== id))
+
+    setSales((prev) => prev.filter((sale) => sale.id !== id))
+
+  } catch (error) {
+    console.error("Delete failed:", error)
+  } finally {
+    setDeletingId(null)
+  }
+}
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -167,10 +182,10 @@ export default function SalesPage() {
         {/* Filters */}
         <div className="px-4 pb-2">
           <div className="bg-white rounded-lg border border-gray-200 p-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-            <div className="flex items-center gap-3 flex-nowrap">
+            <div className="flex items-center gap-4 flex-nowrap">
               <Filter size={14} className="text-gray-400 flex-shrink-0" />
               <span className="text-xs font-medium text-gray-600 flex-shrink-0">Filter by:</span>
-              <div className="flex gap-2">
+              <div className="flex gap-4">
                 <button onClick={() => filterSalesByDate('all')} className={getFilterButtonClass('all')}><Calendar size={12} /> All Time</button>
                 <button onClick={() => filterSalesByDate('daily')} className={getFilterButtonClass('daily')}><Calendar size={12} /> Daily</button>
                 <button onClick={() => filterSalesByDate('weekly')} className={getFilterButtonClass('weekly')}><Calendar size={12} /> Weekly</button>
@@ -190,14 +205,16 @@ export default function SalesPage() {
               <Table>
                 <TableHeader className="bg-gray-50">
                   <TableRow>
-                    <TableHead className="w-6 px-2 py-2"></TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Cashier</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Medicine</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 pl-3 py-2 text-right">Quantity</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2 text-right">Price</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2 text-right">Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 pr-8 py-2 text-right">Total</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Status</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Date</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Action</TableHead>
+
+
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -217,30 +234,66 @@ export default function SalesPage() {
                     filteredSales.map(sale => (
                       <React.Fragment key={sale.id}>
                         <TableRow className="hover:bg-gray-50 border-b border-gray-100">
-                          <TableCell className="px-2 py-2">
-                            {sale.items?.length > 1 && (
-                              <ChevronDown
-                                size={14}
-                                className={`text-gray-400 cursor-pointer transition-transform ${expandedRows.has(sale.id) ? 'rotate-180' : ''}`}
-                                onClick={() => toggleRow(sale.id)}
-                              />
-                            )}
-                          </TableCell>
+                          
                           <TableCell className="px-3 py-2 text-sm font-medium text-gray-800">{sale.cashier?.name || '—'}</TableCell>
                           <TableCell className="px-3 py-2 text-sm text-gray-700">
                             {sale.items?.[0]?.medicine?.name || '—'}
                             {sale.items && sale.items.length > 1 && <span className="ml-1 text-xs text-gray-400">+{sale.items.length - 1}</span>}
                           </TableCell>
-                          <TableCell className="pr-7 py-2 text-right text-sm text-gray-700">{sale.items?.[0]?.quantity || 0}</TableCell>
-                          <TableCell className="px-3 py-2 text-right text-sm text-gray-700">{formatCurrency(sale.items?.[0]?.price || 0)}</TableCell>
-                          <TableCell className="px-3 py-2 text-right text-sm font-medium text-emerald-600">{formatCurrency(sale.total || 0)}</TableCell>
+                          <TableCell className=" pr-7 py-2 text-right text-sm text-gray-700">{sale.items?.[0]?.quantity || 0}</TableCell>
+                          <TableCell className="pl-4 py-2 text-right text-sm text-gray-700">{formatCurrency(sale.items?.[0]?.price || 0)}</TableCell>
+                          <TableCell className="py-2  pr-4 text-right text-sm font-medium text-emerald-600">{formatCurrency(sale.total || 0)}</TableCell>
                           <TableCell className="px-3 py-2">
-                            <span className={`inline-block px-2 py-0.5 text-xs font-medium rounded-full border ${getStatusColor(sale.status || '')}`}>
+                            <span className={`inline-block px-4 py-0.5 text-xs font-medium rounded-full border ${getStatusColor(sale.status || '')}`}>
                               {sale.status || 'UNKNOWN'}
                             </span>
                           </TableCell>
                           <TableCell className="px-3 py-2 text-sm text-gray-600">
                             <ClientDate dateString={sale.createdAt || ''} />
+                          </TableCell>
+                          <TableCell className="">
+
+
+                            <AlertDialog>
+                              <AlertDialogTrigger asChild>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  className="text-red-600 hover:bg-red-100"
+                                >
+                                  <Trash2 size={18} />
+                                </Button>
+                              </AlertDialogTrigger>
+
+                              <AlertDialogContent className="bg-white  ">
+                                <AlertDialogHeader>
+                                  <AlertDialogTitle className="text-center">
+                                    Delete User
+                                  </AlertDialogTitle>
+                                  <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently
+                                    delete
+                                  </AlertDialogDescription>
+                                </AlertDialogHeader>
+
+                                <AlertDialogFooter className="flex justify-center gap-4 sm:justify-center">
+                                  <AlertDialogCancel>
+                                    Cancel
+                                  </AlertDialogCancel>
+
+                                  <AlertDialogAction
+                                    onClick={() => handleDelete(sale.id)}
+                                    className="bg-red-600 hover:bg-red-700"
+                                  >
+                                    {deletingId === sale.id ? (
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                    ) : (
+                                      "Delete"
+                                    )}
+                                  </AlertDialogAction>
+                                </AlertDialogFooter>
+                              </AlertDialogContent>
+                            </AlertDialog>
                           </TableCell>
                         </TableRow>
                       </React.Fragment>
