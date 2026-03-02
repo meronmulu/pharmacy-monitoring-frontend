@@ -7,17 +7,12 @@ import {
   Users,
   Pill,
   ShoppingCart,
-  Settings,
-  LogOut,
-  User,
+  
   Store
 } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
-import { useAuth } from '@/context/AuthContext';
 
 const Menu = () => {
   const pathname = usePathname();
-  const { logout } = useAuth();
 
 
   const items = [
@@ -90,39 +85,7 @@ const Menu = () => {
         </div>
       </div>
 
-      {/* Bottom Settings */}
-      <div className="px-4 py-6 border-t border-white/10">
-        <DropdownMenu >
-          <DropdownMenuTrigger asChild>
-            <button
-              className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-white/5 hover:text-white transition w-full"
-            >
-              <Settings size={20} />
-              <span className="text-sm font-medium">Settings</span>
-            </button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-40 bg-white">
-
-            <DropdownMenuItem asChild>
-              <Link href="/dashboard/profile" className="flex items-center gap-2">
-                <User size={16} />
-                Profile
-              </Link>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem
-              onClick={logout}
-              className="flex items-center gap-2 text-red-600 focus:text-red-600"
-            >
-              <LogOut size={16} />
-              Logout
-            </DropdownMenuItem>
-
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-      </div>
+      
 
     </div>
   );

@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
-import { Mail, Lock, User, Shield } from "lucide-react"
+import { Mail, Lock, User, Shield, EyeOff, Eye } from "lucide-react"
 import { toast } from "sonner"
 
 export default function RegisterPage() {
@@ -52,32 +52,25 @@ export default function RegisterPage() {
 
 
     return (
-        <div className="min-h-screen bg-[#F7F8FA] flex items-center justify-center p-6 relative">
-
-            {/* Card */}
-            <div className="w-full max-w-2xl bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+        <div className="h-screen flex items-center justify-center">
+            <div className="w-full max-w-md sm:max-w-lg lg:max-w-2xl bg-white rounded-3xl shadow-sm border overflow-hidden">
 
                 {/* Header */}
-                <div className="px-10 pt-10 pb-8  border-gray-100">
-
-
-                    <h1 className="text-3xl font-bold text-gray-800">
+                <div className="p-6 sm:p-8 border-b border-gray-100">
+                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
                         Create New User
                     </h1>
-                    <p className="text-gray-500 mt-2">
+                    <p className="text-gray-500 mt-2 text-sm sm:text-base">
                         Add a new team member to the pharmacy management system
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
-
-
-                    <div className="px-10 space-y-8">
+                    <div className="px-6 sm:px-8 space-y-5 sm:space-y-6 py-6">
 
                         {/* Name */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                <User size={16} className="text-emerald-500" />
+                            <label className="text-sm font-medium text-gray-700">
                                 Full Name
                             </label>
                             <div className="relative">
@@ -86,7 +79,7 @@ export default function RegisterPage() {
                                     onChange={(e) => setName(e.target.value)}
                                     required
                                     placeholder="Enter full name"
-                                    className="pl-10 h-12 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                                    className="pl-10 h-11 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
                                 />
                                 <User size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             </div>
@@ -94,8 +87,7 @@ export default function RegisterPage() {
 
                         {/* Email */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                <Mail size={16} className="text-emerald-500" />
+                            <label className="text-sm font-medium text-gray-700">
                                 Email Address
                             </label>
                             <div className="relative">
@@ -105,7 +97,7 @@ export default function RegisterPage() {
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                     placeholder="user@example.com"
-                                    className="pl-10 h-12 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                                    className="pl-10 h-11 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
                                 />
                                 <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                             </div>
@@ -113,79 +105,70 @@ export default function RegisterPage() {
 
                         {/* Password */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                <Lock size={16} className="text-emerald-500" />
+                            <label className="text-sm font-medium text-gray-700">
                                 Password
                             </label>
+
                             <div className="relative">
                                 <Input
                                     type={showPassword ? "text" : "password"}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     required
-                                    placeholder="••••••••"
-                                    className="pl-10 pr-20 h-12 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
+                                    placeholder="Enter your password"
+                                    className="pl-10 pr-12 h-11 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500"
                                 />
+
                                 <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs font-medium text-emerald-600 hover:text-emerald-700"
+                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-600 transition"
                                 >
-                                    {showPassword ? "Hide" : "Show"}
+                                    {showPassword ? (
+                                        <EyeOff className="w-5 h-5" />
+                                    ) : (
+                                        <Eye className="w-5 h-5" />
+                                    )}
                                 </button>
                             </div>
                         </div>
 
                         {/* Role */}
                         <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                                <Shield size={16} className="text-emerald-500" />
+                            <label className="text-sm font-medium text-gray-700">
                                 User Role
                             </label>
 
-                            <div className="relative">
-                                <Select value={role} onValueChange={setRole}>
-                                    <SelectTrigger className="pl-10 h-12 bg-white rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500 w-full">
-                                        <SelectValue placeholder="Select user role" />
-                                    </SelectTrigger>
+                            <Select value={role} onValueChange={setRole}>
+                                <SelectTrigger className="h-11 rounded-xl border-gray-200 focus:border-emerald-500 focus:ring-emerald-500 w-full">
+                                    <SelectValue placeholder="Select user role" />
+                                </SelectTrigger>
 
-                                    <SelectContent className="bg-white">
-                                        <SelectItem value="ADMIN">Admin</SelectItem>
-                                        <SelectItem value="PHARMACIST">Pharmacist</SelectItem>
-                                        <SelectItem value="CASHIER">Cashier</SelectItem>
-                                    </SelectContent>
-                                </Select>
-
-                                {/* Left Icon */}
-                                <Shield
-                                    size={18}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-                                />
-                            </div>
+                                <SelectContent>
+                                    <SelectItem value="ADMIN">Admin</SelectItem>
+                                    <SelectItem value="PHARMACIST">Pharmacist</SelectItem>
+                                    <SelectItem value="CASHIER">Cashier</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
-
-
 
                     </div>
 
                     {/* Footer */}
-                    <div className="px-10 py-6 bg-gray-50 border-t border-gray-100">
+                    <div className="px-6 sm:px-8 py-6 bg-gray-50 border-t border-gray-100">
                         <Button
                             type="submit"
-                            disabled={loading || !name || !email || !password || !role}
                             className="w-full h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium shadow-md"
                         >
                             {loading ? "Creating Account..." : "Create User Account"}
                         </Button>
-
-                        <p className="text-xs text-center text-gray-400 mt-4">
-                            Account access will depend on the selected role
-                        </p>
                     </div>
 
                 </form>
             </div>
         </div>
     )
+
 }

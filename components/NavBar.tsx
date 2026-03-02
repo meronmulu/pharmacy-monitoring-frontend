@@ -95,15 +95,7 @@ export default function NavBar() {
                   );
                 })}
 
-                <DropdownMenuItem asChild>
-                  <Link
-                    href="/dashboard/profile"
-                    className="flex items-center gap-2 px-2 py-2 rounded hover:bg-gray-100"
-                  >
-                    <UserIcon size={18} />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
+                
 
                 <DropdownMenuItem
                   onClick={logout}

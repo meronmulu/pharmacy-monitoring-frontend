@@ -28,11 +28,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  type User = {
-    name?: string;
-    role: string;
-    [key: string]: any;
-  };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,10 +41,9 @@ export default function Login() {
       if (user && typeof user === "object" && "role" in user) {
         toast.success("Login Successful", {
           style: {
-            background: " #fff",
-            color: "#16a34a",
-            border: "1px solid #16a34a",
-            borderRadius: "8px",
+            background: "#ecfdf5",
+            color: "#047857",
+            
           },
         })
         const roleRoutes: Record<string, string> = {
