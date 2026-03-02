@@ -4,8 +4,11 @@ import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { getMedicineById, updateMedicine } from "@/service/medicineService"
 import { getAllSuppliers } from "@/service/supplierService"
-import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "sonner"
+import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 export default function UpdateMedicinePage() {
   const router = useRouter()
@@ -17,7 +20,6 @@ export default function UpdateMedicinePage() {
   const [expiryDate, setExpiryDate] = useState("")
   const [supplierId, setSupplierId] = useState("")
   const [suppliers, setSuppliers] = useState<{ id: number; name: string }[]>([])
-  const [saving, setSaving] = useState(false)
 
   // Fetch suppliers
   useEffect(() => {
@@ -54,7 +56,6 @@ export default function UpdateMedicinePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSaving(true)
 
     try {
       await updateMedicine(Number(id), {
@@ -64,143 +65,134 @@ export default function UpdateMedicinePage() {
         expiryDate: new Date(expiryDate).toISOString(),
         supplierId: Number(supplierId),
       })
-      alert("Medicine updated successfully!")
+      toast.success("Medicine updated successfully!")
       router.push("/dashboard/medicine")
     } catch (err) {
       console.error("Failed to update medicine:", err)
-      alert("Failed to update medicine. Check console.")
-    } finally {
-      setSaving(false)
-    }
+      toast.error("Failed to update medicine. Check console.")
+    } 
   }
 
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] flex justify-center items-start p-4">
-      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-gray-100">
+    <div className="p-6 bg-[#F7F8FA]">
+  <div className="max-w-3xl mx-auto">
+    <div className="bg-white rounded-2xl shadow-sm border p-8">
 
-        {/* Header */}
-        <div className="px-8 py-6 border-b border-gray-100">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            Update Medicine
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Enter medicine details below to add it to inventory
-          </p>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <FieldGroup>
+          <FieldSet>
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="px-8 py-8 space-y-6"
-        >
+            <FieldLegend>
+              <p className="text-2xl font-bold">Update Medicine</p>
+            </FieldLegend>
 
-          {/* Medicine Name */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Medicine Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-              placeholder="Enter medicine name"
-            />
-          </div>
+            <FieldDescription>
+              Modify the medicine details below
+            </FieldDescription>
 
-          {/* Price + Quantity Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+            <FieldGroup className="">
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Price (ETB)
-              </label>
-              <input
-                type="number"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="0.00"
-              />
-            </div>
+              {/* Medicine Name */}
+              <Field>
+                <FieldLabel>Medicine Name</FieldLabel>
+                <Input
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  placeholder="Enter medicine name"
+                />
+              </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Quantity
-              </label>
-              <input
-                type="number"
-                name="quantity"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="Enter quantity"
-              />
-            </div>
+              {/* Price + Quantity */}
+              <div className="grid md:grid-cols-2 gap-6">
 
-          </div>
+                <Field>
+                  <FieldLabel>Price (ETB)</FieldLabel>
+                  <Input
+                    type="number"
+                    name="price"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    required
+                    placeholder="0.00"
+                  />
+                </Field>
 
-          {/* Expiry + Supplier Grid */}
-          <div className="grid md:grid-cols-2 gap-6">
+                <Field>
+                  <FieldLabel>Quantity</FieldLabel>
+                  <Input
+                    type="number"
+                    name="quantity"
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                    required
+                    placeholder="Enter quantity"
+                  />
+                </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Expiry Date
-              </label>
-              <input
-                type="date"
-                name="expiryDate"
-                value={expiryDate}
-                onChange={(e) => setExpiryDate(e.target.value)}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-              />
-            </div>
+              </div>
 
+              {/* Expiry + Supplier */}
+              <div className="grid md:grid-cols-2 gap-6">
 
+                <Field>
+                  <FieldLabel>Expiry Date</FieldLabel>
+                  <Input
+                    type="date"
+                    name="expiryDate"
+                    value={expiryDate}
+                    onChange={(e) => setExpiryDate(e.target.value)}
+                    required
+                  />
+                </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Supplier</label>
+                <Field>
+                  <FieldLabel>Supplier</FieldLabel>
+                  <Select
+                    value={supplierId}
+                    onValueChange={(value) => setSupplierId(value)}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select Supplier" />
+                    </SelectTrigger>
 
-              <Select
-                value={supplierId}
-                onValueChange={(value) => setSupplierId(value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Supplier" />
-                </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {suppliers.map((s) => (
+                        <SelectItem
+                          key={s.id}
+                          value={s.id.toString()}
+                        >
+                          {s.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
 
-                <SelectContent>
-                  {suppliers.map((s) => (
-                    <SelectItem key={s.id} value={s.id.toString()}>
-                      {s.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+              </div>
 
-          </div>
+            </FieldGroup>
+
+          </FieldSet>
 
           {/* Submit Button */}
-          <div className="pt-4">
-            <button
+          <Field orientation="horizontal" className="pt-6">
+            <Button
               type="submit"
-              className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition shadow-md"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              update Medicine
-            </button>
-          </div>
+              Update Medicine
+            </Button>
+          </Field>
 
-        </form>
-      </div>
+        </FieldGroup>
+      </form>
+
     </div>
+  </div>
+</div>
   )
 }
 

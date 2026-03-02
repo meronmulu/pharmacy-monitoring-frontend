@@ -59,7 +59,7 @@ export default function Login() {
       }
     } catch (err) {
       console.log(err)
-      toast.error(err.message || "Login failed")
+      toast.error("Login failed")
       setError("Login failed")
     } finally {
       setLoading(false)

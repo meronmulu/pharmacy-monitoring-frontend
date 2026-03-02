@@ -89,7 +89,7 @@ export default function Page() {
                                     {medicine.name}
                                 </TableCell>
 
-                                <TableCell>{medicine.price}</TableCell>
+                                <TableCell>{medicine.price} ETB</TableCell>
                                 <TableCell>{medicine.quantity}</TableCell>
                                 <TableCell>
                                     {new Date(medicine.expiryDate).toLocaleDateString("en-GB")}

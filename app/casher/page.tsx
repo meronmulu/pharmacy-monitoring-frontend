@@ -9,6 +9,7 @@ import { ShoppingCart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
+import { toast } from 'sonner'
 
 type CartItem = Medicine & { quantity: number }
 
@@ -98,12 +99,12 @@ export default function PharmacyPage() {
     const result = await createSale(saleData)
 
     if (result) {
-      alert('Sale added successfully!')
+      toast.success('Sale added successfully!')
       setCart([])
       const updatedMedicines = await getAllmedicines()
       setMedicines(updatedMedicines)
     } else {
-      alert('Failed to add sale. Please try again.')
+      toast.error('Failed to add sale. Please try again.')
     }
   }
 
@@ -145,7 +146,7 @@ export default function PharmacyPage() {
 
               <div className="mt-4 flex items-center justify-between">
                 <p className="font-medium text-green-700 text-lg">
-                  {med.price.toFixed(2)}
+                  {med.price.toFixed(2)} ETB
                 </p>
                 <button
                   onClick={() => addToCart(med)}
@@ -185,7 +186,7 @@ export default function PharmacyPage() {
                 <div>
                   <p className="font-medium">{item.name}</p>
                   <p className="text-sm text-gray-500">
-                    {item.price} x {item.quantity}
+                    {item.price} x {item.quantity}   ETB
                   </p>
                 </div>
 
@@ -212,7 +213,7 @@ export default function PharmacyPage() {
         <div className="border-t p-6">
           <div className="flex justify-between font-bold text-lg">
             <span>Total:</span>
-            <span className='text-green-600'>{total.toFixed(2)}</span>
+            <span className='text-green-600'>{total.toFixed(2)} ETB</span>
           </div>
 
           <button

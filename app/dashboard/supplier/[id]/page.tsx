@@ -3,7 +3,10 @@
 import { useState, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { getSupplierById, updateSupplier } from "@/service/supplierService"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { toast } from "sonner"
+import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 export default function UpdateSupplierPage() {
   const router = useRouter()
@@ -13,7 +16,6 @@ export default function UpdateSupplierPage() {
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
   const [address, setAddress] = useState("")
-  const [saving, setSaving] = useState(false)
 
   
 
@@ -38,7 +40,6 @@ export default function UpdateSupplierPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSaving(true)
 
     try {
       await updateSupplier(Number(id), {
@@ -48,117 +49,96 @@ export default function UpdateSupplierPage() {
         address: address
         
       })
-      alert("Supplier updated successfully!")
+      toast.success("Supplier updated successfully!")
       router.push("/dashboard/supplier")
     } catch (err) {
       console.error("Failed to update supplier:", err)
-      alert("Failed to update supplier. Check console.")
-    } finally {
-      setSaving(false)
-    }
+      toast.error("Failed to update supplier. Check console.")
+    } 
   }
 
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] flex justify-center items-start p-4">
-      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-gray-100">
+   <div className="bg-[#F7F8FA]">
+  <div className="max-w-2xl mx-auto">
+    <div className="bg-white rounded-2xl shadow-sm border p-8">
 
-        {/* Header */}
-        <div className="px-8 py-6 border-b border-gray-100">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            Update Supplier
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Enter supplier details below to update it in inventory
-          </p>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <FieldGroup>
+          <FieldSet>
+            <FieldLegend>
+              <p className="text-2xl font-bold">Update Supplier</p>
+            </FieldLegend>
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="px-8 py-8 space-y-6"
-        >
+            <FieldDescription>
+              Enter supplier details below to update it in inventory
+            </FieldDescription>
 
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Supplier Name
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-              placeholder="Enter supplier name"
-            />
-          </div>
+            <FieldGroup className="">
 
+              {/* Supplier Name */}
+              <Field>
+                <FieldLabel>Supplier Name</FieldLabel>
+                <Input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                  placeholder="Enter supplier name"
+                />
+              </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Phone
-              </label>
-              <input
-                type="number"
-                name="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="0.00"
-              />
-            </div>
+              {/* Phone */}
+              <Field>
+                <FieldLabel>Phone</FieldLabel>
+                <Input
+                  type="tel"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  placeholder="Enter phone number"
+                />
+              </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <input
-                type="email"
-                name="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="Enter email"
-              />
-            </div>
+              {/* Email */}
+              <Field>
+                <FieldLabel>Email</FieldLabel>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="Enter email"
+                />
+              </Field>
 
+              {/* Address */}
+              <Field>
+                <FieldLabel>Address</FieldLabel>
+                <Input
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  required
+                  placeholder="Enter address"
+                />
+              </Field>
 
+            </FieldGroup>
+          </FieldSet>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Address
-              </label>
-              <input
-                type="text"
-                name="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-              />
-            </div>
-
-
-
-            
-
-
-          {/* Submit Button */}
-          <div className="pt-4">
-            <button
+          <Field orientation="horizontal" className="pt-6">
+            <Button
               type="submit"
-              className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition shadow-md"
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
             >
-              update Supplier
-            </button>
-          </div>
+              Update Supplier
+            </Button>
+          </Field>
+        </FieldGroup>
+      </form>
 
-        </form>
-      </div>
     </div>
+  </div>
+</div>
   )
 }
 

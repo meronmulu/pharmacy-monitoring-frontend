@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { toast } from "sonner"
 
 export default function EditUserPage() {
   const { id } = useParams()
@@ -51,80 +52,97 @@ export default function EditUserPage() {
     e.preventDefault()
     setSaving(true)
 
-    const updated = await updateUser(id as unknown as number, {
-      name,
-      email,
-      role,
-    })
+    try {
+      const updated = await updateUser(Number(id), {
+        name,
+        email,
+        role,
+      })
 
-    if (updated) {
-      router.push("/dashboard/user")
+      if (updated) {
+        toast.success("User updated successfully ", {
+          position: "top-center",
+        })
+
+        router.push("/dashboard/user")
+
+      } else {
+        toast.error("Failed to update user", {
+          position: "top-center",
+        })
+      }
+    } catch {
+      toast.error("Failed to update user. Check console.")
+    } finally {
+      setSaving(false)
     }
-
-    setSaving(false)
   }
 
- 
+
 
   return (
-    <div className="flex min-h-screen p-4 items-center justify-center bg-gray-50">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-md">
-        <form onSubmit={handleSubmit}>
-          <FieldGroup>
-            <FieldSet>
-              <FieldLegend className="text-6xl text-center font-bold">Update User</FieldLegend>
-              <FieldDescription className="text-center">
-                Update user account information
-              </FieldDescription>
+    <div className=" bg-[#F7F8FA]">
+      <div className="max-w-2xl  mx-auto">
+        <div className="bg-white rounded-2xl shadow-sm border p-8">
+          <form onSubmit={handleSubmit}>
+            <FieldGroup>
+              <FieldSet>
+                <FieldLegend className=" text-center font-bold">
+                  <p className="text-2xl  font-bold">Update User</p>
+                </FieldLegend>
+                <FieldDescription className="text-center">
+                  Update user account information
+                </FieldDescription>
 
-              <FieldGroup className="space-y-4 pt-4">
-                <Field>
-                  <FieldLabel>Full Name</FieldLabel>
-                  <Input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </Field>
+                <FieldGroup className="">
+                  <Field>
+                    <FieldLabel>Full Name</FieldLabel>
+                    <Input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                    />
+                  </Field>
 
-                <Field>
-                  <FieldLabel>Email Address</FieldLabel>
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                </Field>
+                  <Field>
+                    <FieldLabel>Email Address</FieldLabel>
+                    <Input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </Field>
 
-                <Field>
-                  <FieldLabel>User Role</FieldLabel>
-                  <Select value={role} onValueChange={setRole}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select user role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="ADMIN">ADMIN</SelectItem>
-                      <SelectItem value="CASHIER">CASHIER</SelectItem>
-                      <SelectItem value="PHARMACIST">PHARMACIST</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </FieldGroup>
-            </FieldSet>
+                  <Field>
+                    <FieldLabel>User Role</FieldLabel>
+                    <Select value={role} onValueChange={setRole}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select user role" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white">
+                        <SelectItem value="ADMIN">ADMIN</SelectItem>
+                        <SelectItem value="CASHIER">CASHIER</SelectItem>
+                        <SelectItem value="PHARMACIST">PHARMACIST</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </FieldGroup>
+              </FieldSet>
 
-            <Field orientation="horizontal" className="pt-4">
-              <Button
-                type="submit"
-                disabled={saving}
-                className="w-full text-white bg-emerald-500 hover:bg-emerald-600"
-              >
-                {saving ? "Updating..." : "Update User"}
-              </Button>
-            </Field>
-          </FieldGroup>
-        </form>
+              <Field orientation="horizontal" className="pt-4">
+                <Button
+                  type="submit"
+                  disabled={saving}
+                  className="w-full text-white bg-emerald-500 hover:bg-emerald-600"
+                >
+                  {saving ? "Updating..." : "Update User"}
+                </Button>
+              </Field>
+            </FieldGroup>
+          </form>
+        </div>
       </div>
-    </div>
-  )
+      </div>
+      )
 }

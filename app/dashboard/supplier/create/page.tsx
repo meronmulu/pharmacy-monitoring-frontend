@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import { createSupplier, getAllSuppliers } from "@/service/supplierService";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Field, FieldDescription, FieldGroup, FieldLabel, FieldLegend, FieldSet } from "@/components/ui/field";
 interface Supplier {
   id: number;
   name: string;
@@ -28,134 +31,131 @@ export default function AddSupplierPage() {
     fetchSuppliers();
   }, []);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
+  try {
     const formattedData = {
       ...formData,
       name: formData.name,
       phone: formData.phone,
       email: formData.email,
-      address: formData.address
+      address: formData.address,
     };
 
     await createSupplier(formattedData);
 
-    alert("Supplier Added Successfully ");
-    router.push("/dashboard/supplier");
-  };
+    toast.success("Supplier added successfully ", {
+      position: "top-center",
+    });
+
+    setTimeout(() => {
+      router.push("/dashboard/supplier");
+    }, 800);
+
+  } catch (error) {
+    console.error("Failed to add supplier:", error);
+
+     toast.error("Failed to add supplier. Check console.");
+  }
+};
 
   return (
-    <div className="min-h-screen bg-[#F7F8FA] flex justify-center items-start p-4">
-      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg border border-gray-100">
+  <div className="bg-[#F7F8FA]">
+    <div className="max-w-2xl mx-auto ">
+      <div className="bg-white rounded-2xl shadow-sm border p-8  ">
 
-        {/* Header */}
-        <div className="px-8 py-6 border-b border-gray-100">
-          <h1 className="text-2xl font-semibold text-gray-800">
-            Add New Supplier
-          </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Enter supplier details below to add it to inventory
-          </p>
-        </div>
+        <form onSubmit={handleSubmit}>
+          <FieldGroup>
+            <FieldSet>
+              <FieldLegend>
+                <p className="text-2xl font-bold">Add Supplier</p>
+              </FieldLegend>
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="px-8 py-8 space-y-6"
-        >
+              <FieldDescription>
+                Enter supplier details below to add it to inventory
+              </FieldDescription>
 
-          {/* Supplier Name */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-700">
-              Supplier Name
-            </label>
-            <Input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-              placeholder="Enter supplier name"
-            />
-          </div>
+              <FieldGroup className="">
 
+                {/* Supplier Name */}
+                <Field>
+                  <FieldLabel>Supplier Name</FieldLabel>
+                  <Input
+                    name="name"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    required
+                    placeholder="Enter supplier name"
+                  />
+                </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Phone Number
-              </label>
-              <Input
-                type="number"
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="Enter phone number"
-              />
-            </div>
+                {/* Phone */}
+                <Field>
+                  <FieldLabel>Phone Number</FieldLabel>
+                  <Input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    required
+                    placeholder="Enter phone number"
+                  />
+                </Field>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Email
-              </label>
-              <Input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="Enter email"
-              />
-            </div>
+                {/* Email */}
+                <Field>
+                  <FieldLabel>Email Address</FieldLabel>
+                  <Input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    required
+                    placeholder="Enter email address"
+                  />
+                </Field>
 
+                {/* Address */}
+                <Field>
+                  <FieldLabel>Address</FieldLabel>
+                  <Input
+                    name="address"
+                    value={formData.address}
+                    onChange={(e) =>
+                      setFormData({ ...formData, address: e.target.value })
+                    }
+                    required
+                    placeholder="Enter supplier address"
+                    className="hover:border-green-500"
+                  />
+                </Field>
 
-       
+              </FieldGroup>
+            </FieldSet>
 
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Adress
-              </label>
-              <Input
-                type="text"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-                className="w-full h-11 rounded-lg border border-gray-200 px-3 focus:outline-none focus:ring-2 focus:ring-emerald-500  transition"
-                placeholder="Enter address"
-              />
-            </div>
-
-            
-
-          
-
-
-          {/* Submit Button */}
-          <div className="pt-4">
-            <button
-              type="submit"
-              className="w-full h-11 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-medium transition shadow-md"
-            >
-              Add Supplier
-            </button>
-          </div>
-
+            <Field orientation="horizontal" className="pt-6">
+              <Button
+                type="submit"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+              >
+                Add Supplier
+              </Button>
+            </Field>
+          </FieldGroup>
         </form>
+
       </div>
     </div>
-  );
+  </div>
+)
+  
 }

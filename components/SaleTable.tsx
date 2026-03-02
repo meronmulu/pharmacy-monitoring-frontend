@@ -166,7 +166,7 @@ export default function SalesPage() {
           <div className="bg-white rounded-lg p-3 border border-gray-200">
             <p className="text-xs text-gray-500">Total Revenue</p>
             <p className="text-lg font-semibold text-gray-800 mt-1">
-              ETB {formatCurrency(summary.totalSales)}
+              {formatCurrency(summary.totalSales)}  ETB
             </p>
           </div>
           <div className="bg-white rounded-lg p-3 border border-gray-200">
@@ -208,8 +208,8 @@ export default function SalesPage() {
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Cashier</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Medicine</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 pl-3 py-2 text-right">Quantity</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2 text-right">Price</TableHead>
-                    <TableHead className="text-xs font-semibold text-gray-600 pr-8 py-2 text-right">Total</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 p-10  py-2 text-right">Price</TableHead>
+                    <TableHead className="text-xs font-semibold text-gray-600 pr-14 py-2 text-right">Total</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Status</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Date</TableHead>
                     <TableHead className="text-xs font-semibold text-gray-600 px-3 py-2">Action</TableHead>
@@ -241,8 +241,8 @@ export default function SalesPage() {
                             {sale.items && sale.items.length > 1 && <span className="ml-1 text-xs text-gray-400">+{sale.items.length - 1}</span>}
                           </TableCell>
                           <TableCell className=" pr-7 py-2 text-right text-sm text-gray-700">{sale.items?.[0]?.quantity || 0}</TableCell>
-                          <TableCell className="pl-4 py-2 text-right text-sm text-gray-700">{formatCurrency(sale.items?.[0]?.price || 0)}</TableCell>
-                          <TableCell className="py-2  pr-4 text-right text-sm font-medium text-emerald-600">{formatCurrency(sale.total || 0)}</TableCell>
+                          <TableCell className="pl-4 py-2 text-right text-sm text-gray-700">{formatCurrency(sale.items?.[0]?.price || 0)} ETB</TableCell>
+                          <TableCell className="py-2  pr-5 text-right text-sm font-medium text-emerald-600">{formatCurrency(sale.total || 0)} ETB</TableCell>
                           <TableCell className="px-3 py-2">
                             <span className={`inline-block px-4 py-0.5 text-xs font-medium rounded-full border ${getStatusColor(sale.status || '')}`}>
                               {sale.status || 'UNKNOWN'}

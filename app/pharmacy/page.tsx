@@ -210,7 +210,7 @@ export default function Page() {
                     transition={{ duration: 0.5, delay: 0.2 }}
                     className="mb-8"
                 >
-                    <div className="flex flex-col sm:flex-row gap-4">
+                    <div className="flex flex-col sm:flex-row gap-4 p-4 bg-white">
                         <div className="relative flex-1">
                             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                             <Input
@@ -332,7 +332,7 @@ export default function Page() {
                                                         </CardDescription>
                                                     </div>
                                                     
-                                                    <DropdownMenu>
+                                                    {/* <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
                                                             <Button variant="ghost" size="icon" className="h-8 w-8">
                                                                 <MoreVertical className="h-4 w-4" />
@@ -346,7 +346,7 @@ export default function Page() {
                                                                 <Trash2 className="h-4 w-4 mr-2" /> Delete
                                                             </DropdownMenuItem>
                                                         </DropdownMenuContent>
-                                                    </DropdownMenu>
+                                                    </DropdownMenu> */}
                                                 </div>
                                             </CardHeader>
 
@@ -364,9 +364,8 @@ export default function Page() {
                                                             </span>
                                                         </div>
                                                         <div className="flex items-center gap-1">
-                                                            <DollarSign className="h-4 w-4 text-emerald-500" />
                                                             <span className="font-bold text-emerald-600">
-                                                                ${medicine.price.toFixed(2)}
+                                                                {medicine.price.toFixed(2)} ETB
                                                             </span>
                                                         </div>
                                                     </div>

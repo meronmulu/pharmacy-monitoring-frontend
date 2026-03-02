@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
 import {
-  CircleUserRound,
   LogOut,
   Menu as MenuIcon,
   LayoutDashboard,
@@ -95,7 +94,7 @@ export default function NavBar() {
                   );
                 })}
 
-                
+
 
                 <DropdownMenuItem
                   onClick={logout}
@@ -114,10 +113,15 @@ export default function NavBar() {
       <div className="flex items-center">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <CircleUserRound
-              size={32}
-              className="cursor-pointer text-gray-600 hover:text-gray-800 transition"
-            />
+            <DropdownMenuTrigger asChild>
+              <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-medium text-sm cursor-pointer hover:ring-2 hover:ring-emerald-600 transition">
+                {fullUser?.name? (
+                  fullUser.name[0].toUpperCase()
+                ) : (
+                  <UserIcon className="w-4 h-4" />
+                )}
+              </div>
+            </DropdownMenuTrigger>
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-56 bg-white">
