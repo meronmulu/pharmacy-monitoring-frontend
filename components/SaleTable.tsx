@@ -238,7 +238,6 @@ export default function SalesPage() {
                           <TableCell className="px-3 py-2 text-sm font-medium text-gray-800">{sale.cashier?.name || '—'}</TableCell>
                           <TableCell className="px-3 py-2 text-sm text-gray-700">
                             {sale.items?.[0]?.medicine?.name || '—'}
-                            {sale.items && sale.items.length > 1 && <span className="ml-1 text-xs text-gray-400">+{sale.items.length - 1}</span>}
                           </TableCell>
                           <TableCell className=" pr-7 py-2 text-right text-sm text-gray-700">{sale.items?.[0]?.quantity || 0}</TableCell>
                           <TableCell className="pl-4 py-2 text-right text-sm text-gray-700">{formatCurrency(sale.items?.[0]?.price || 0)} ETB</TableCell>

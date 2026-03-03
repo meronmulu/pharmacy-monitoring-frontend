@@ -59,3 +59,11 @@ export interface Supplier {
   medicines?: Medicine[] 
   createdAt: string 
 }
+
+export type Notification = {
+  id: number;
+  type: "LOW_STOCK" | "INFO" | "OTHER"; 
+  message: string;
+  isRead: boolean;
+  createdAt: string; 
+};

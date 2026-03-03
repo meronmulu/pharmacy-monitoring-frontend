@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js'
 import { Bar } from 'react-chartjs-2'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
@@ -17,7 +18,7 @@ export default function AdminDashboard() {
 
   const [sales, setSales] = useState<Sale[]>([])
   const [users, setUsers] = useState<User[]>([])
-  const [topMedicines, setTopMedicines] = useState<any[]>([])
+  const [topMedicines, setTopMedicines] = useState<{ name: string; quantitySold: number }[]>([])
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -72,9 +73,7 @@ export default function AdminDashboard() {
 
   const totalSales = sales.length
 
-  const totalStaff = users.filter(
-    user => user.role?.toUpperCase() === "STAFF"
-  ).length
+  const totalStaff = users.length
 
   const totalMedicines = new Set(
     sales.flatMap(s => s.items?.map(i => i.medicine?.id))
@@ -112,14 +111,7 @@ export default function AdminDashboard() {
     ],
   }
 
-  const getStatusVariant = (status: string) => {
-    switch (status?.toUpperCase()) {
-      case 'COMPLETED': return 'success'
-      case 'PENDING': return 'warning'
-      case 'CANCELLED': return 'destructive'
-      default: return 'secondary'
-    }
-  }
+
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen space-y-6">
@@ -127,7 +119,7 @@ export default function AdminDashboard() {
       {/* ================= CARDS ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="flex items-center gap-2">
             <DollarSign className="text-emerald-500" />
             <CardTitle>Today Revenue</CardTitle>
@@ -137,7 +129,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="flex items-center gap-2">
             <FileText className="text-blue-500" />
             <CardTitle>Total Sales</CardTitle>
@@ -147,7 +139,7 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="flex items-center gap-2">
             <Package className="text-purple-500" />
             <CardTitle>Total Medicines</CardTitle>
@@ -157,10 +149,10 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="bg-white">
           <CardHeader className="flex items-center gap-2">
             <Users className="text-pink-500" />
-            <CardTitle>Total Staff</CardTitle>
+            <CardTitle>Total User</CardTitle>
           </CardHeader>
           <CardContent className="text-2xl font-bold">
             {totalStaff}
@@ -172,43 +164,8 @@ export default function AdminDashboard() {
       {/* ================= RECENT SALES + TOP MEDICINES ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        {/* Recent Sales */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Sales</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[350px] pr-4">
-              {loading ? (
-                <div className="flex justify-center items-center h-40">
-                  <Loader2 className="animate-spin text-emerald-500 h-8 w-8" />
-                </div>
-              ) : (
-                sales.slice(0, 10).map((sale) => (
-                  <div key={sale.id} className="flex justify-between p-3 mb-3 bg-gray-50 rounded-lg">
-                    <div>
-                      <p className="font-medium">{sale.cashier?.name || "Unknown"}</p>
-                      <p className="text-sm text-gray-500">
-                        {new Date(sale.createdAt).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-bold">
-                        ETB {formatCurrency(sale.total || 0)}
-                      </p>
-                      <Badge variant={getStatusVariant(sale.status || '')}>
-                        {sale.status}
-                      </Badge>
-                    </div>
-                  </div>
-                ))
-              )}
-            </ScrollArea>
-          </CardContent>
-        </Card>
-
         {/* Top Medicines */}
-        <Card>
+        <Card className="bg-white">
           <CardHeader>
             <CardTitle>Top Selling Medicines</CardTitle>
           </CardHeader>
@@ -223,16 +180,70 @@ export default function AdminDashboard() {
             </ScrollArea>
           </CardContent>
         </Card>
-
+        <Card className="bg-white">
+          <CardHeader>
+            <CardTitle>Sales Trend (Last 7 Days)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Bar data={barChartData} />
+          </CardContent>
+        </Card>
       </div>
 
-      {/* ================= SALES TREND ================= */}
-      <Card>
+      <Card className="bg-white">
         <CardHeader>
-          <CardTitle>Sales Trend (Last 7 Days)</CardTitle>
+          <CardTitle>Recent Sales</CardTitle>
         </CardHeader>
         <CardContent>
-          <Bar data={barChartData} />
+          <Card>
+            <CardContent>
+              <ScrollArea className="h-64">
+                {loading ? (
+                  <div className="flex justify-center py-10">
+                    <Loader2 className="animate-spin text-emerald-500 h-6 w-6" />
+                  </div>
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Cashier</TableHead>
+                        <TableHead>Medicine</TableHead>
+                        <TableHead>Qty</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Total</TableHead>
+                        <TableHead>Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {sales
+                        .slice(-5) // takes the last 5 sales
+                        .reverse() // optional: to show newest first
+                        .map((sale) => (
+                          <TableRow key={sale.id}>
+                            <TableCell>{sale.cashier?.name}</TableCell>
+                            <TableCell>
+                              {sale.items?.map((i) => i.medicine?.name).join(', ')}
+                            </TableCell>
+                            <TableCell>
+                              {sale.items?.reduce((sum, i) => sum + (i.quantity || 0), 0)}
+                            </TableCell>
+                            <TableCell>
+                              {formatCurrency(
+                                sale.items?.reduce((sum, i) => sum + (i.price || 0), 0) || 0
+                              )}
+                            </TableCell>
+                            <TableCell>{formatCurrency(sale.total || 0)}</TableCell>
+                            <TableCell>
+                              <Badge>{sale.status}</Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </ScrollArea>
+            </CardContent>
+          </Card>
         </CardContent>
       </Card>
 

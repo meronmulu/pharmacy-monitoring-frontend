@@ -58,6 +58,8 @@ export default function Page() {
     const [filterStatus, setFilterStatus] = useState<"all" | "lowStock" | "expired" | "inStock">("all")
 
     useEffect(() => {
+        if (!user) return
+
         if (user?.role !== "PHARMACIST") {
             router.replace("/")
         }
@@ -84,8 +86,8 @@ export default function Page() {
 
     const filteredMedicines = medicines.filter(m => {
         const matchesSearch = m.name.toLowerCase().includes(search.toLowerCase())
-        
-        switch(filterStatus) {
+
+        switch (filterStatus) {
             case "lowStock":
                 return matchesSearch && m.quantity <= 10
             case "expired":
@@ -105,16 +107,16 @@ export default function Page() {
     }
 
 
-    const StatCard = ({ 
-        title, 
-        value, 
-        icon: Icon, 
+    const StatCard = ({
+        title,
+        value,
+        icon: Icon,
         color,
-        onClick 
-    }: { 
-        title: string; 
-        value: number; 
-        icon: LucideIcon; 
+        onClick
+    }: {
+        title: string;
+        value: number;
+        icon: LucideIcon;
         color: string;
         onClick?: () => void;
     }) => (
@@ -141,9 +143,11 @@ export default function Page() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-            <NavBar />
+            <div className="fixed top-0 left-0 w-full z-50">
+                <NavBar />
+            </div>
 
-            <div className="px-4 sm:px-6 lg:px-8 p-4 max-w-7xl mx-auto">
+            <div className="px-4 sm:px-6 lg:px-8  pt-20 max-w-7xl mx-auto">
                 {/* Header Section */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
@@ -162,7 +166,7 @@ export default function Page() {
                             </p>
                         </div>
 
-                        
+
                     </div>
                 </motion.div>
 
@@ -220,10 +224,10 @@ export default function Page() {
                                 className="pl-10 pr-4 py-2 w-full border-gray-200 focus:border-emerald-500 focus:ring-emerald-500 rounded-xl"
                             />
                         </div>
-                        
+
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button variant="outline" className="border-gray-200 hover:bg-gray-50 rounded-xl">
+                                <Button variant="outline" className="border-gray-200 hover:bg-gray-50 rounded-xl ">
                                     <Filter className="h-4 w-4 mr-2" />
                                     {filterStatus === "all" && "All Medicines"}
                                     {filterStatus === "inStock" && "In Stock"}
@@ -232,7 +236,7 @@ export default function Page() {
                                     <ChevronDown className="h-4 w-4 ml-2" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48">
+                            <DropdownMenuContent align="end" className="w-48 bg-white">
                                 <DropdownMenuLabel>Filter by</DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem onClick={() => setFilterStatus("all")}>
@@ -303,11 +307,11 @@ export default function Page() {
                                     >
                                         <Card className={cn(
                                             "relative overflow-hidden border-2 transition-all duration-300 h-full",
-                                            isExpired 
+                                            isExpired
                                                 ? "border-red-200 hover:border-red-300 bg-gradient-to-br from-white to-red-50/30"
                                                 : isLowStock
-                                                ? "border-amber-200 hover:border-amber-300 bg-gradient-to-br from-white to-amber-50/30"
-                                                : "border-gray-100 hover:border-emerald-200 bg-gradient-to-br from-white to-emerald-50/30",
+                                                    ? "border-amber-200 hover:border-amber-300 bg-gradient-to-br from-white to-amber-50/30"
+                                                    : "border-gray-100 hover:border-emerald-200 bg-gradient-to-br from-white to-emerald-50/30",
                                             "hover:shadow-xl hover:shadow-emerald-500/5"
                                         )}>
                                             {/* Status Indicator */}
@@ -331,7 +335,7 @@ export default function Page() {
                                                             })}
                                                         </CardDescription>
                                                     </div>
-                                                    
+
                                                     {/* <DropdownMenu>
                                                         <DropdownMenuTrigger asChild>
                                                             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -400,7 +404,7 @@ export default function Page() {
                                                 </div>
                                             </CardContent>
 
-                                           
+
                                         </Card>
                                     </motion.div>
                                 )

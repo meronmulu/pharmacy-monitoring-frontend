@@ -122,13 +122,7 @@ export default function SalesPage() {
             maximumFractionDigits: 2,
         }).format(amount)
 
-    const toggleRow = (saleId: number) => {
-        const newExpanded = new Set(expandedRows)
-        newExpanded.has(saleId)
-            ? newExpanded.delete(saleId)
-            : newExpanded.add(saleId)
-        setExpandedRows(newExpanded)
-    }
+   
 
     const getFilterButtonClass = (filter: typeof selectedFilter) => {
         const base =
@@ -142,7 +136,9 @@ export default function SalesPage() {
     return (
 
         <div>
-            <NavBar />
+           <div className="fixed top-0 left-0 w-full z-50">
+                    <NavBar />
+                 </div>
             <div className="flex h-screen bg-gray-50 px-10">
                 <div className="flex-1 flex flex-col overflow-hidden">
 
@@ -187,7 +183,6 @@ export default function SalesPage() {
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead></TableHead>
                                             <TableHead>Medicine</TableHead>
                                             <TableHead>Quantity</TableHead>
                                             <TableHead>Total</TableHead>
@@ -212,15 +207,7 @@ export default function SalesPage() {
                                         ) : (
                                             filteredSales.map(sale => (
                                                 <TableRow key={sale.id}>
-                                                    <TableCell>
-                                                        {sale.items?.length > 1 && (
-                                                            <ChevronDown
-                                                                size={14}
-                                                                className="cursor-pointer"
-                                                                onClick={() => toggleRow(sale.id)}
-                                                            />
-                                                        )}
-                                                    </TableCell>
+                                                    
                                                     <TableCell>
                                                         {sale.items?.[0]?.medicine?.name}
                                                     </TableCell>

@@ -128,12 +128,12 @@ export default function Login() {
                   <Label htmlFor="password" className="text-sm font-semibold text-gray-700">
                     Password
                   </Label>
-                  <button
+                  {/* <button
                     type="button"
                     className="text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
                   >
                     Forgot password?
-                  </button>
+                  </button> */}
                 </div>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
