@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext'
 import { toast } from 'sonner'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 type CartItem = Medicine & { quantity: number }
 
@@ -39,9 +40,8 @@ export default function PharmacyPage() {
       }
     }
 
-    if (user?.role === 'CASHIER') {
       fetchMedicines()
-    }
+  
   }, [user])
 
 
@@ -125,8 +125,9 @@ export default function PharmacyPage() {
   }
 
   return (
-    <>
-      <>
+    <> 
+    <ProtectedRoute roles={ ["CASHIER"]}>
+
         <div className="fixed top-0 left-0 w-full z-50">
           <NavBar />
         </div>
@@ -253,7 +254,8 @@ export default function PharmacyPage() {
 
           </div>
         </div>
-      </>
+
+    </ProtectedRoute>
     </>
   )
 }

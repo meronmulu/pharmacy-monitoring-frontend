@@ -47,6 +47,7 @@ import { getAllmedicines } from "@/service/medicineService"
 import { Medicine } from "@/types"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function Page() {
     const { user } = useAuth()
@@ -79,9 +80,8 @@ export default function Page() {
             }
         }
 
-        if (user?.role === "PHARMACIST") {
             fetchMedicines()
-        }
+    
     }, [user])
 
     const filteredMedicines = medicines.filter(m => {
@@ -142,6 +142,8 @@ export default function Page() {
     )
 
     return (
+    <ProtectedRoute roles={ ["PHARMACIST"]}>
+        
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="fixed top-0 left-0 w-full z-50">
                 <NavBar />
@@ -414,5 +416,6 @@ export default function Page() {
                 )}
             </div>
         </div>
+    </ProtectedRoute>
     )
 }

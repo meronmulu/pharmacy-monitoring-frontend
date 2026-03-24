@@ -21,6 +21,7 @@ import {
 import { getSalesByCashierId } from "@/service/saleService"
 import { div } from "framer-motion/client"
 import NavBar from "@/components/NavBar"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 // Date formatter
 const ClientDate = ({ dateString }: { dateString: string }) => {
@@ -122,7 +123,7 @@ export default function SalesPage() {
             maximumFractionDigits: 2,
         }).format(amount)
 
-   
+
 
     const getFilterButtonClass = (filter: typeof selectedFilter) => {
         const base =
@@ -134,105 +135,106 @@ export default function SalesPage() {
     }
 
     return (
+        <ProtectedRoute roles={["CASHIER"]}>
 
-        <div>
-           <div className="fixed top-0 left-0 w-full z-50">
+            <div>
+                <div className="fixed top-0 left-0 w-full z-50 ">
                     <NavBar />
-                 </div>
-            <div className="flex h-screen bg-gray-50 px-10">
-                <div className="flex-1 flex flex-col overflow-hidden">
+                </div>
+                <div className="flex h-screen bg-gray-50 px-10 pt-14">
+                    <div className="flex-1 flex flex-col overflow-hidden">
 
-                    <div className="bg-white border-b border-gray-200 px-6 py-3 mt-5 md:flex md:items-center md:justify-between flex-col md:flex-row space-y-3 md:space-y-0">
-                        <h1 className="text-xl font-semibold text-gray-800">Sales Overview</h1>
-                        <div className="flex items-center gap-3">
-                            <Input
-                                type="text"
-                                placeholder="Search transactions..."
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 md:w-96 w-64"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Filters */}
-                    <div className="px-4 py-2">
-                        <div className="bg-white rounded-lg border p-2 flex items-center justify-between overflow-x-auto">
+                        <div className="bg-white border-b border-gray-200 px-6 py-3 mt-5 md:flex md:items-center md:justify-between flex-col md:flex-row space-y-3 md:space-y-0">
+                            <h1 className="text-xl font-semibold text-gray-800">Sales Overview</h1>
                             <div className="flex items-center gap-3">
-                                <Filter size={14} />
-                                <span className="text-xs font-medium">Filter by:</span>
-
-                                <div className="flex gap-2">
-                                    <button onClick={() => filterSalesByDate("all")} className={getFilterButtonClass("all")}><Calendar size={12} /> All</button>
-                                    <button onClick={() => filterSalesByDate("daily")} className={getFilterButtonClass("daily")}><Calendar size={12} /> Daily</button>
-                                    <button onClick={() => filterSalesByDate("weekly")} className={getFilterButtonClass("weekly")}><Calendar size={12} /> Weekly</button>
-                                    <button onClick={() => filterSalesByDate("monthly")} className={getFilterButtonClass("monthly")}><Calendar size={12} /> Monthly</button>
-                                </div>
+                                <Input
+                                    type="text"
+                                    placeholder="Search transactions..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="pl-9 pr-4 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 md:w-96 w-64"
+                                />
                             </div>
-
-                            <span className="text-xs text-gray-500">
-                                {filteredSales.length} transactions
-                            </span>
                         </div>
-                    </div>
 
-                    {/* Table */}
-                    <div className="flex-1 px-4 pb-4 overflow-auto">
-                        <div className="bg-white rounded-lg border overflow-hidden">
-                            <div className="overflow-x-auto">
-                                <Table>
-                                    <TableHeader>
-                                        <TableRow>
-                                            <TableHead>Medicine</TableHead>
-                                            <TableHead>Quantity</TableHead>
-                                            <TableHead>Total</TableHead>
-                                            <TableHead>Status</TableHead>
-                                            <TableHead>Date</TableHead>
-                                        </TableRow>
-                                    </TableHeader>
+                        {/* Filters */}
+                        <div className="px-4 py-2">
+                            <div className="bg-white rounded-lg border p-2 flex items-center justify-between overflow-x-auto">
+                                <div className="flex items-center gap-3">
+                                    <Filter size={14} />
+                                    <span className="text-xs font-medium">Filter by:</span>
 
-                                    <TableBody>
-                                        {loading ? (
+                                    <div className="flex gap-2">
+                                        <button onClick={() => filterSalesByDate("all")} className={getFilterButtonClass("all")}><Calendar size={12} /> All</button>
+                                        <button onClick={() => filterSalesByDate("daily")} className={getFilterButtonClass("daily")}><Calendar size={12} /> Daily</button>
+                                        <button onClick={() => filterSalesByDate("weekly")} className={getFilterButtonClass("weekly")}><Calendar size={12} /> Weekly</button>
+                                        <button onClick={() => filterSalesByDate("monthly")} className={getFilterButtonClass("monthly")}><Calendar size={12} /> Monthly</button>
+                                    </div>
+                                </div>
+
+                                <span className="text-xs text-gray-500">
+                                    {filteredSales.length} transactions
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Table */}
+                        <div className="flex-1 px-4 pb-4 overflow-auto">
+                            <div className="bg-white rounded-lg border overflow-hidden">
+                                <div className="overflow-x-auto">
+                                    <Table>
+                                        <TableHeader>
                                             <TableRow>
-                                                <TableCell colSpan={6} className="text-center py-8">
-                                                    <Loader2 className="h-5 w-5 animate-spin mx-auto" />
-                                                </TableCell>
+                                                <TableHead>Medicine</TableHead>
+                                                <TableHead>Quantity</TableHead>
+                                                <TableHead>Total</TableHead>
+                                                <TableHead>Status</TableHead>
+                                                <TableHead>Date</TableHead>
                                             </TableRow>
-                                        ) : filteredSales.length === 0 ? (
-                                            <TableRow>
-                                                <TableCell colSpan={6} className="text-center py-8 text-gray-500">
-                                                    No sales found
-                                                </TableCell>
-                                            </TableRow>
-                                        ) : (
-                                            filteredSales.map(sale => (
-                                                <TableRow key={sale.id}>
-                                                    
-                                                    <TableCell>
-                                                        {sale.items?.[0]?.medicine?.name}
-                                                    </TableCell>
-                                                    <TableCell>
-                                                        {sale.items?.[0]?.quantity}
-                                                    </TableCell>
-                                                    <TableCell className="text-emerald-600 font-medium">
-                                                        {formatCurrency(sale.total || 0)}
-                                                    </TableCell>
-                                                    <TableCell>{sale.status}</TableCell>
-                                                    <TableCell>
-                                                        <ClientDate dateString={sale.createdAt || ""} />
+                                        </TableHeader>
+
+                                        <TableBody>
+                                            {loading ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={6} className="text-center py-8">
+                                                        <Loader2 className="h-5 w-5 animate-spin mx-auto" />
                                                     </TableCell>
                                                 </TableRow>
-                                            ))
-                                        )}
-                                    </TableBody>
+                                            ) : filteredSales.length === 0 ? (
+                                                <TableRow>
+                                                    <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                                                        No sales found
+                                                    </TableCell>
+                                                </TableRow>
+                                            ) : (
+                                                filteredSales.map(sale => (
+                                                    <TableRow key={sale.id}>
 
-                                </Table>
+                                                        <TableCell>
+                                                            {sale.items?.[0]?.medicine?.name}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            {sale.items?.[0]?.quantity}
+                                                        </TableCell>
+                                                        <TableCell className="text-emerald-600 font-medium">
+                                                            {formatCurrency(sale.total || 0)}
+                                                        </TableCell>
+                                                        <TableCell>{sale.status}</TableCell>
+                                                        <TableCell>
+                                                            <ClientDate dateString={sale.createdAt || ""} />
+                                                        </TableCell>
+                                                    </TableRow>
+                                                ))
+                                            )}
+                                        </TableBody>
+
+                                    </Table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </ProtectedRoute>
     )
 }

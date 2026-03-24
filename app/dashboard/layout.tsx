@@ -5,24 +5,20 @@ import { useRouter } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
 import Menu from "@/components/Menu"
 import NavBar from "@/components/NavBar"
+import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { user } = useAuth()
-  const router = useRouter()
 
-  useEffect(() => {
-    if (user && user.role !== "ADMIN") {
-      router.replace("/")
-    }
-  }, [user, router])
 
-  if (!user || user.role !== "ADMIN") return null
+ 
 
   return (
+  <ProtectedRoute roles={ ["ADMIN"]}>
+
     <div className="flex h-screen w-screen overflow-hidden">
 
       {/* Sidebar */}
@@ -38,5 +34,7 @@ export default function AdminLayout({
         </div>
       </div>
     </div>
+  
+  </ProtectedRoute>
   )
 }

@@ -4,6 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useEffect, useState } from "react";
+import socket from "@/lib/socket";
+
 import {
   LogOut,
   Menu as MenuIcon,
@@ -15,23 +17,27 @@ import {
   User as UserIcon,
   Bell
 } from "lucide-react";
+
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu";
+
 import { User, Notification } from "@/types";
 import { getUserById } from "@/service/userService";
 import { getNotifications, markNotificationRead } from "@/service/notificationService";
+import { toast } from "sonner";
 
 export default function NavBar() {
   const { user, logout } = useAuth();
   const pathname = usePathname();
+
   const [fullUser, setFullUser] = useState<User | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  // Fetch full user info
+  // Fetch full user
   useEffect(() => {
     if (!user?.id) return;
 
@@ -47,8 +53,7 @@ export default function NavBar() {
     fetchUser();
   }, [user]);
 
-  // Fetch unread notifications for ADMIN
-  // Fetch notifications for admin
+  // ✅ Fetch notifications from API
   useEffect(() => {
     if (user?.role !== "ADMIN") return;
 
@@ -60,7 +65,37 @@ export default function NavBar() {
     fetchNotifications();
   }, [user]);
 
-  // Mark notification as read
+  //  REAL-TIME SOCKET LISTENER + TOAST
+  useEffect(() => {
+    if (user?.role !== "ADMIN") return;
+
+    socket.on("lowStock", (data) => {
+      console.log(" Real-time:", data);
+
+      // Toast popup
+      toast.error(` ${data.message}`);
+
+      //  Prevent duplicates
+      setNotifications((prev) => {
+        const exists = prev.some(n => n.message === data.message);
+        if (exists) return prev;
+
+        return [
+          {
+            id: Date.now(),
+            message: data.message,
+          },
+          ...prev,
+        ];
+      });
+    });
+
+    return () => {
+      socket.off("lowStock");
+    };
+  }, [user]);
+
+  // Mark as read
   const handleMarkRead = async (id: number) => {
     await markNotificationRead(id);
     setNotifications(prev => prev.filter(n => n.id !== id));
@@ -86,7 +121,6 @@ export default function NavBar() {
           </h1>
         )}
 
-        {/* Admin Mobile Menu */}
         {user?.role === "ADMIN" && (
           <div className="md:hidden">
             <DropdownMenu>
@@ -134,7 +168,7 @@ export default function NavBar() {
       {/* RIGHT SIDE */}
       <div className="flex items-center gap-4">
 
-        {/* 🔔 ADMIN ONLY NOTIFICATIONS */}
+        {/* NOTIFICATIONS */}
         {user?.role === "ADMIN" && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -152,7 +186,7 @@ export default function NavBar() {
               <h4 className="font-semibold mb-2">Low Stock Notifications</h4>
 
               {notifications.length === 0 ? (
-                <p className="text-sm text-gray-500">No new notifications ✅</p>
+                <p className="text-sm text-gray-500">No new notifications </p>
               ) : (
                 notifications.map(n => (
                   <div key={n.id} className="flex justify-between items-center mb-2 border-b pb-1">

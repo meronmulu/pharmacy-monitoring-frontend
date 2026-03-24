@@ -1,37 +1,42 @@
-'use client';
+'use client'
 
-import { useAuth } from '@/context/AuthContext';
-import { useRouter } from 'next/navigation';
-import { useEffect, ReactNode } from 'react';
+import { useEffect } from "react"
+import { useAuth } from "@/context/AuthContext"
+import { Loader2 } from "lucide-react"
 
-interface ProtectedRouteProps {
-  children: ReactNode;
-  allowedRoles: Array<'ADMIN' | 'PHARMACIST' | 'CASHIER'>;
-}
+type Role = 'ADMIN' | 'PHARMACIST' | 'CASHIER'
 
-export const ProtectedRoute = ({ children, allowedRoles }: ProtectedRouteProps) => {
-  const { user } = useAuth();
-  const router = useRouter();
+export default function ProtectedRoute({
+  children,
+  roles
+}: {
+  children: React.ReactNode
+  roles?: Role[]
+}) {
+
+  const { user } = useAuth()
 
   useEffect(() => {
-    if (user === null) {
-      const userInStorage = localStorage.getItem('user');
-      if (!userInStorage) {
-        router.replace('/');
-      } else {
-        const parsed = JSON.parse(userInStorage);
-        if (!allowedRoles.includes(parsed.role)) {
-          router.replace('/dashboard/unauthorized');
-        }
-      }
-    } else {
-if (!allowedRoles.includes(user.role as 'ADMIN' | 'PHARMACIST' | 'CASHIER')) {
-        router.replace('/dashboard/unauthorized');
-      }
 
+    if (!user) {
+      window.location.href = "/"
+      return
     }
-  }, [user, allowedRoles, router]);
 
+    if (roles && !roles.includes(user.role as Role)) {
+      window.location.href = "/unauthorized"
+    }
 
-  return <>{children}</>;
-};
+  }, [user, roles])
+
+  
+  if (!user) {
+    return (
+     <div className="h-[70vh] flex items-center justify-center">
+        <Loader2 className="animate-spin text-emerald-500" size={32} />
+      </div>
+    )
+  }
+
+  return <>{children}</>
+}
