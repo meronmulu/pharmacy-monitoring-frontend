@@ -1,11 +1,9 @@
 'use client'
 
-import { useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { useAuth } from "@/context/AuthContext"
+
 import Menu from "@/components/Menu"
 import NavBar from "@/components/NavBar"
-import ProtectedRoute from "@/components/ProtectedRoute"
+// import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function AdminLayout({
   children,
@@ -17,7 +15,7 @@ export default function AdminLayout({
  
 
   return (
-  <ProtectedRoute roles={ ["ADMIN"]}>
+  // <ProtectedRoute roles={ ["ADMIN"]}>
 
     <div className="flex h-screen w-screen overflow-hidden">
 
@@ -35,6 +33,5 @@ export default function AdminLayout({
       </div>
     </div>
   
-  </ProtectedRoute>
   )
 }

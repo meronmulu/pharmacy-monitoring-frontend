@@ -21,7 +21,6 @@ import {
 import { getSalesByCashierId } from "@/service/saleService"
 import { div } from "framer-motion/client"
 import NavBar from "@/components/NavBar"
-import ProtectedRoute from "@/components/ProtectedRoute"
 
 // Date formatter
 const ClientDate = ({ dateString }: { dateString: string }) => {
@@ -135,7 +134,7 @@ export default function SalesPage() {
     }
 
     return (
-        <ProtectedRoute roles={["CASHIER"]}>
+        // <ProtectedRoute roles={["CASHIER"]}>
 
             <div>
                 <div className="fixed top-0 left-0 w-full z-50 ">
@@ -235,6 +234,6 @@ export default function SalesPage() {
                     </div>
                 </div>
             </div>
-        </ProtectedRoute>
+        // </ProtectedRoute>
     )
 }

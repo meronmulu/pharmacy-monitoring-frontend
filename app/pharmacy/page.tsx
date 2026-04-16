@@ -47,7 +47,7 @@ import { getAllmedicines } from "@/service/medicineService"
 import { Medicine } from "@/types"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
-import ProtectedRoute from "@/components/ProtectedRoute"
+// import ProtectedRoute from "@/components/ProtectedRoute"
 
 export default function Page() {
     const { user } = useAuth()
@@ -58,13 +58,7 @@ export default function Page() {
     const [pageLoading, setPageLoading] = useState(false)
     const [filterStatus, setFilterStatus] = useState<"all" | "lowStock" | "expired" | "inStock">("all")
 
-    useEffect(() => {
-        if (!user) return
-
-        if (user?.role !== "PHARMACIST") {
-            router.replace("/")
-        }
-    }, [user, router])
+    
 
     useEffect(() => {
         const fetchMedicines = async () => {
@@ -142,7 +136,7 @@ export default function Page() {
     )
 
     return (
-    <ProtectedRoute roles={ ["PHARMACIST"]}>
+    // <ProtectedRoute roles={ ["PHARMACIST"]}>
         
         <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
             <div className="fixed top-0 left-0 w-full z-50">
@@ -416,6 +410,6 @@ export default function Page() {
                 )}
             </div>
         </div>
-    </ProtectedRoute>
+    // </ProtectedRoute>
     )
 }

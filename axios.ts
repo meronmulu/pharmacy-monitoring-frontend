@@ -1,9 +1,8 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:5000/api";
 
 const instance = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -15,7 +14,7 @@ instance.interceptors.request.use(
     if (typeof window !== "undefined") {
       const token = localStorage.getItem("token");
 
-      console.log("🔐 Sending token:", token);
+      console.log("Sending token:", token);
 
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
