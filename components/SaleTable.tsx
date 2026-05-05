@@ -13,7 +13,6 @@ import {
 import {
   Loader2,
   Calendar,
-  ChevronDown,
   Filter,
   Trash2,
 } from "lucide-react"
@@ -21,6 +20,7 @@ import { deleteSale, getAllSales } from "@/service/saleService"
 import { Input } from "./ui/input"
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog"
 import { Button } from "./ui/button"
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "./ui/pagination"
 
 // Client-safe date formatter
 const ClientDate = ({ dateString }: { dateString: string }) => {
@@ -39,9 +39,11 @@ export default function SalesPage() {
   const [sales, setSales] = useState<Sale[]>([])
   const [loading, setLoading] = useState(false)
   const [selectedFilter, setSelectedFilter] = useState<'all' | 'daily' | 'weekly' | 'monthly'>('all')
-  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set())
   const [searchTerm, setSearchTerm] = useState("")
   const [deletingId, setDeletingId] = useState<number | null>(null)
+
+   const [currentPage, setCurrentPage] = useState(1)
+    const itemsPerPage = 7
 
   // Fetch all sales from backend
   const fetchSales = async () => {
@@ -110,7 +112,7 @@ export default function SalesPage() {
   const getFilterButtonClass = (filter: typeof selectedFilter) => {
     const base = "px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-1 whitespace-nowrap"
     return selectedFilter === filter
-      ? `${base} bg-emerald-600 text-white shadow-sm`
+      ? `${base} bg-blue-600 text-white shadow-sm`
       : `${base} bg-white text-gray-600 hover:bg-gray-50 border border-gray-200`
   }
 
@@ -142,7 +144,14 @@ export default function SalesPage() {
     setDeletingId(null)
   }
 }
+   
 
+const totalPages = Math.ceil(filteredSales.length / itemsPerPage)
+
+const paginatedSales = filteredSales.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+)
   return (
     <div className="flex h-screen bg-gray-50">
       <div className="flex-1 flex flex-col overflow-hidden">
@@ -231,7 +240,7 @@ export default function SalesPage() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredSales.map(sale => (
+                    paginatedSales.map(sale => (
                       <React.Fragment key={sale.id}>
                         <TableRow className="hover:bg-gray-50 border-b border-gray-100">
                           
@@ -293,7 +302,11 @@ export default function SalesPage() {
                                 </AlertDialogFooter>
                               </AlertDialogContent>
                             </AlertDialog>
+
+
+
                           </TableCell>
+
                         </TableRow>
                       </React.Fragment>
                     ))
@@ -302,6 +315,54 @@ export default function SalesPage() {
               </Table>
             </div>
           </div>
+        </div>
+
+        {/* ShadCN Pagination */}
+        <div className="mt-6 flex justify-center">
+          <Pagination>
+            <PaginationContent>
+
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() =>
+                    setCurrentPage((p) => Math.max(p - 1, 1))
+                  }
+                  className={
+                    currentPage === 1
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+
+              {Array.from({ length: totalPages || 1 }).map((_, i) => (
+                <PaginationItem key={i}>
+                  <PaginationLink
+                    isActive={currentPage === i + 1}
+                    onClick={() => setCurrentPage(i + 1)}
+                  >
+                    {i + 1}
+                  </PaginationLink>
+                </PaginationItem>
+              ))}
+
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() =>
+                    setCurrentPage((p) =>
+                      Math.min(p + 1, totalPages || 1)
+                    )
+                  }
+                  className={
+                    currentPage === totalPages
+                      ? "pointer-events-none opacity-50"
+                      : "cursor-pointer"
+                  }
+                />
+              </PaginationItem>
+
+            </PaginationContent>
+          </Pagination>
         </div>
       </div>
     </div>

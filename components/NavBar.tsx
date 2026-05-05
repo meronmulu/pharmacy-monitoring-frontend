@@ -54,6 +54,7 @@ export default function NavBar() {
   }, [user]);
 
   // ✅ Fetch notifications from API
+
   useEffect(() => {
     if (user?.role !== "ADMIN") return;
 
@@ -77,6 +78,7 @@ export default function NavBar() {
 
       //  Prevent duplicates
       setNotifications((prev) => {
+
         const exists = prev.some(n => n.message === data.message);
         if (exists) return prev;
 
@@ -115,9 +117,9 @@ export default function NavBar() {
       {/* LEFT SIDE */}
       <div className="flex items-center gap-4">
         {(user?.role === "CASHIER" || user?.role === "PHARMACIST") && (
-          <h1 className="text-xl font-semibold text-gray-800">
+          <h1 className="text-xl font-semibold text-blue-900">
             Pharmacy
-            <span className="text-emerald-400">Monitor</span>
+            <span className="text-blue-500">Monitor</span>
           </h1>
         )}
 
@@ -207,18 +209,27 @@ export default function NavBar() {
         {/* PROFILE */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-medium text-sm cursor-pointer hover:ring-2 hover:ring-emerald-600 transition">
-              {fullUser?.name
-                ? fullUser.name[0].toUpperCase()
-                : <UserIcon className="w-4 h-4" />}
+            <div className="flex items-center gap-3 px-3 py-2">
+              <div className=" ">
+                <p className="text-gray-800 font-medium">
+                  {fullUser?.name
+                    ? fullUser.name.charAt(0).toUpperCase() + fullUser.name.slice(1).toLowerCase()
+                    : ""}
+                </p>             
+                 <p className=" text-sm text-blue-500">{fullUser?.role?.toLowerCase()}</p>
+              </div>
+
+              <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-medium text-sm cursor-pointer hover:ring-2 hover:ring-blue-600 transition">
+                {fullUser?.name
+                  ? fullUser.name[0].toUpperCase()
+                  : <UserIcon className="w-4 h-4" />}
+              </div>
             </div>
+
           </DropdownMenuTrigger>
 
           <DropdownMenuContent align="end" className="w-56 bg-white">
-            <div className="px-4 py-2 border-b">
-              <p className="text-gray-800 font-medium">{fullUser?.name || "Loading..."}</p>
-              <p className="text-gray-500 text-sm">{fullUser?.role?.toLowerCase()}</p>
-            </div>
+
 
             {user?.role === "CASHIER" && (
               <DropdownMenuItem className="flex items-center gap-2 hover:bg-gray-50">

@@ -9,7 +9,7 @@ export default function Page() {
     <div className="p-4">
       <div className="flex items-center justify-between px-4 py-2">
         <h1 className="text-2xl font-bold mb-4">Medicines</h1> 
-        <Button className="bg-emerald-500 text-white">
+        <Button className="bg-blue-600 text-white">
           
           <Link href="/dashboard/medicine/create">+ Medicines</Link>
         </Button>

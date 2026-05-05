@@ -67,8 +67,7 @@ export default function Login() {
   }
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-green-50 overflow-hidden">
-
+<div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-blue-100 overflow-hidden">
 
       <Card className="relative flex flex-col bg-white/80 backdrop-blur-sm lg:flex-row w-full max-w-4xl shadow-2xl rounded-3xl overflow-hidden border-0">
 
@@ -90,11 +89,8 @@ export default function Login() {
         <div className="w-full lg:w-1/2 py-10 px-8 md:px-12 flex flex-col justify-center">
           <CardHeader className="text-center space-y-2 p-0 mb-6">
             <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <LogIn className="w-8 h-8 text-white" />
-              </div>
             </div>
-            <CardTitle className="text-3xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+            <CardTitle className="text-3xl font-bold">
               Welcome Back
             </CardTitle>
             <CardDescription className="text-gray-500 text-sm">
@@ -115,7 +111,7 @@ export default function Login() {
                     id="email"
                     type="email"
                     placeholder="name@example.com"
-                    className="pl-10 h-10 bg-gray-50 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+  className="pl-10 h-10 bg-gray-50 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -141,7 +137,7 @@ export default function Login() {
                     id="password"
                     type={showPassword ? "text" : "password"}
                     placeholder="••••••••"
-                    className="pl-10 pr-12 h-10 bg-gray-50 border-gray-200 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-200 transition-all duration-200"
+                    className="pl-10 pr-12 h-10 bg-gray-50 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-200"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -164,8 +160,7 @@ export default function Login() {
 
               <Button
                 type="submit"
-                className="w-full h-10 text-base font-semibold bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700 text-white rounded-xl shadow-lg shadow-green-500/25 hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"
-                disabled={loading}
+className="w-full h-10 text-base font-semibold bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-xl transition-all duration-200 transform hover:scale-[1.02]"                disabled={loading}
               >
                 {loading ? (
                   <div className="flex items-center justify-center">

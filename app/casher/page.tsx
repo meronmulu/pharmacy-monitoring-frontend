@@ -163,7 +163,7 @@ export default function PharmacyPage() {
                         className={`font-bold px-3 py-1 rounded-lg transition
                              ${med.quantity === 0
                             ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-                            : "bg-green-100 text-green-500 hover:bg-green-500 hover:text-white"
+                            : "bg-blue-100 text-blue-500 hover:bg-blue-500 hover:text-white"
                           }
   `}
                       >
@@ -228,7 +228,7 @@ export default function PharmacyPage() {
               <div className="border-t p-6">
                 <div className="flex justify-between font-bold text-lg">
                   <span>Total:</span>
-                  <span className='text-green-600'>{total.toFixed(2)} ETB</span>
+                  <span className='text-blue-600'>{total.toFixed(2)} ETB</span>
                 </div>
 
                 <button
@@ -237,7 +237,7 @@ export default function PharmacyPage() {
                   className={`w-full mt-4 py-3 rounded-lg transition
               ${cart.length === 0
                       ? "bg-gray-300 cursor-not-allowed"
-                      : "bg-green-600 hover:bg-green-700 text-white"
+                      : "bg-blue-600 hover:bg-blue-700 text-white"
                     }`}
                 >
                   Complete Sale
