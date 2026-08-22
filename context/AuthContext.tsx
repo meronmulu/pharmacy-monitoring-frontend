@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const userString = localStorage.getItem('user');
     if (userString) {
       try {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setUser(JSON.parse(userString));
       } catch (e) {
         console.error("Failed to parse user", e);
@@ -40,9 +41,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // Ensure res.user matches the User type
         const user: User = {
           id: res.user.id,
-          name: res.user.name,
-          email: res.user.email,
-          password: res.user.password,
+          name: (res.user as User).name,
+          email: (res.user as User).email,
+          password: (res.user as User).password,
           role: res.user.role,
           // add any other User fields as needed
         };

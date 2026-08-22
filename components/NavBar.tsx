@@ -68,35 +68,39 @@ export default function NavBar() {
 
   //  REAL-TIME SOCKET LISTENER + TOAST
   useEffect(() => {
-    if (user?.role !== "ADMIN") return;
+  if (user?.role !== "ADMIN") return;
 
-    socket.on("lowStock", (data) => {
-      console.log(" Real-time:", data);
+  socket.on("lowStock", (data) => {
+    console.log("Real-time:", data);
 
-      // Toast popup
-      toast.error(` ${data.message}`);
+    // Toast popup
+    toast.error(`${data.message}`);
 
-      //  Prevent duplicates
-      setNotifications((prev) => {
+    // Prevent duplicates
+    setNotifications((prev) => {
+      const exists = prev.some(
+        (n) => n.message === data.message
+      );
 
-        const exists = prev.some(n => n.message === data.message);
-        if (exists) return prev;
+      if (exists) return prev;
 
-        return [
-          {
-            id: Date.now(),
-            message: data.message,
-          },
-          ...prev,
-        ];
-      });
+      return [
+        {
+          id: Date.now(),
+          message: data.message,
+          type: data.type ?? "LOW_STOCK",
+          isRead: false,
+          createdAt: new Date().toISOString(),
+        },
+        ...prev,
+      ];
     });
+  });
 
-    return () => {
-      socket.off("lowStock");
-    };
-  }, [user]);
-
+  return () => {
+    socket.off("lowStock");
+  };
+}, [user]);
   // Mark as read
   const handleMarkRead = async (id: number) => {
     await markNotificationRead(id);
