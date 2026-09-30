@@ -126,7 +126,7 @@ export default function Login() {
                   </Label>
                   {/* <button
                     type="button"
-                    className="text-sm text-green-600 hover:text-green-700 font-medium transition-colors"
+                    className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
                   >
                     Forgot password?
                   </button> */}

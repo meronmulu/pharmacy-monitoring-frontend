@@ -134,7 +134,7 @@ export default function EditUserPage() {
                 <Button
                   type="submit"
                   disabled={saving}
-                  className="w-full text-white bg-emerald-500 hover:bg-emerald-600"
+                  className="w-full text-white bg-blue-600 hover:bg-blue-700"
                 >
                   {saving ? "Updating..." : "Update User"}
                 </Button>

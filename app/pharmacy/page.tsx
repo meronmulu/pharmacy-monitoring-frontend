@@ -271,7 +271,7 @@ export default function Page() {
                         </p>
                         {!search && (
                             <Link href="/dashboard/medicine/create">
-                                <Button className="bg-emerald-500 hover:bg-emerald-600 text-white">
+                                <Button className="bg-blue-500 hover:bg-blue-600 text-white">
                                     <Plus className="h-4 w-4 mr-2" />
                                     Add Medicine
                                 </Button>

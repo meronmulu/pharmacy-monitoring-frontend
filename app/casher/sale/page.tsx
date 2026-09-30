@@ -129,7 +129,7 @@ export default function SalesPage() {
             "px-3 py-1.5 text-xs font-medium rounded-md transition-all flex items-center gap-1 whitespace-nowrap"
 
         return selectedFilter === filter
-            ? `${base} bg-emerald-600 text-white`
+            ? `${base} bg-blue-600 text-white`
             : `${base} bg-white text-gray-600 border border-gray-200 hover:bg-gray-50`
     }
 

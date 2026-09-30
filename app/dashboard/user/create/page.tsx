@@ -165,7 +165,7 @@ export default function RegisterPage() {
                             <div className="px-6 sm:px-8 py-6 bg-gray-50 border-t border-gray-100">
                                 <Button
                                     type="submit"
-                                    className="w-full h-12 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium shadow-md"
+                                    className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-medium shadow-md"
                                 >
                                     {loading ? "Creating Account..." : "Create User Account"}
                                 </Button>

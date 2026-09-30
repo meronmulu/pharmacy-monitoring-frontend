@@ -145,7 +145,7 @@ export default function AddSupplierPage() {
             <Field orientation="horizontal" className="pt-6">
               <Button
                 type="submit"
-                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
               >
                 Add Supplier
               </Button>
